@@ -24,6 +24,7 @@ class VacancyScrapperBase:
 
     async def run(self):
         while True:
+            await TelegramReportingService.send_message_to_private_channel(f"Scrapping {self.source}")
             try:
                 old_vacancies = VacancyTable.get_by_source(self.source)
                 old_vacancies_urls = set(vacancy.url for vacancy in old_vacancies)

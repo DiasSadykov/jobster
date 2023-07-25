@@ -2,7 +2,7 @@ from .base_vacancy_scrapper import VacancyScrapperBase
 from services.models import Vacancy
 from bs4 import BeautifulSoup
 
-MAX_PAGE = 1
+MAX_PAGE = 100
 
 class HHKZVacancyScrapper(VacancyScrapperBase):
     def __init__(self):
