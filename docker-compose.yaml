@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python_web_service
+    ports:
+      - "8000:8000"  # Replace the second port with the one your Python web service listens on
+    volumes:
+      - ./:/app  # Mount your Python web service code to the container
+      - ~/data:/data  # Mount a volume to store the database
+    environment:
+      - DATABASE_LOCATION=/data/db.sqlite3
+    command: ["python", "src/app.py"]  # Replace with the correct path to your web service script
+
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scraper_job
+    volumes:
+      - ./:/app  # Mount your scraper code to the container
+      - ~/data:/data  # Mount a volume to store the database
+    environment:
+      - DATABASE_LOCATION=/data/db.sqlite3
+      - BOT_TOKEN=${BOT_TOKEN}  # Replace with your Telegram bot token
+    command: ["python", "src/scrap.py"]  # Replace with the correct path to your scrap.py script
