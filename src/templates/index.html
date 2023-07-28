@@ -3,7 +3,7 @@
 <body>
     <div class="mx-20 mt-40">
         {% include "static/hero.html" without context %}
-        <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": ".grid-item" }'>
+        <div class="grid">
             {% for employer in top_employers %}
                     <div class="grid-item md:w-1/3 sm:w-1/2">
                         <div class="card bg-transparent">

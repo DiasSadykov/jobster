@@ -10,9 +10,9 @@
         </div>
       <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div
-          class="inline-block min-w-full shadow-md rounded-lg overflow-hidden"
+          class="inline-block overflow-hidden"
         >
-          <table class="min-w-full leading-normal">
+          <table id="all_vacancies" class="min-w-full leading-normal">
             <thead>
               <tr>
                 <th
@@ -35,64 +35,81 @@
                 >
                   Город
                 </th>
-                <th
-                  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"
-                ></th>
               </tr>
             </thead>
             <tbody>
-                {% for vacancies_by_company in vacancies_sorted_by_company %}
-                    {% for vacancy in vacancies_by_company %}
-                    <tr>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <div class="flex">
-                            <div class="ml-3">
-                            <p class="text-gray-900 font-bold whitespace-no-wrap">
-                                {{vacancy.title}}
-                            </p>
-                            </div>
-                        </div>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p class="text-gray-900 whitespace-no-wrap">{{vacancy.salary if vacancy.salary else 'Зарплата не указана'}}</p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <p class="text-gray-900 whitespace-no-wrap">{{vacancy.company}}</p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        <span
-                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
-                        >
-                            <span
-                            aria-hidden
-                            class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                            ></span>
-                            <span class="relative">{{vacancy.city}}</span>
-                        </span>
-                        </td>
-                        <td
-                        class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right"
-                        >
-                        <button
-                            type="button"
-                            class="inline-block text-gray-500 hover:text-gray-700"
-                        >
-                            <svg
-                            class="inline-block h-6 w-6 fill-current"
-                            viewBox="0 0 24 24"
-                            >
-                            <path
-                                d="M12 6a2 2 0 110-4 2 2 0 010 4zm0 8a2 2 0 110-4 2 2 0 010 4zm-2 6a2 2 0 104 0 2 2 0 00-4 0z"
-                            />
-                            </svg>
-                        </button>
-                        </td>
-                    </tr>   
-                    {% endfor %}
-                {% endfor %}
             </tbody>
           </table>
         </div>
       </div>
     </div>
-  </div></div>
+  </div>
+</div>
+<script>
+  // template vacancies into js array
+  const vacancies = [
+    {% for vacancies_by_company in vacancies_sorted_by_company %}
+      {% for vacancy in vacancies_by_company %}
+        [
+          "{{vacancy.title}}",
+          "{{vacancy.company}}",
+          "{{vacancy.salary}}",
+          "{{vacancy.city}}",
+        ],
+      {% endfor %}
+    {% endfor %}
+  ];
+  new DataTable('#all_vacancies', {
+      columns: [
+          { title: 'Позиция' },
+          { title: 'Компания' },
+          { title: 'Компенсация' },
+          { title: 'Город' },
+      ],
+      data: vacancies,
+      initComplete: function(settings, json) {
+        $('.dataTables_filter').addClass('btn btn-sm btn-dark mb-2');
+        $('.dataTables_paginate').addClass('btn btn-sm btn-dark mt-2');
+        $('.dataTables_length').addClass('btn btn-sm btn-dark');
+        $('.dataTables_info').addClass('btn btn-sm btn-dark mt-2');
+        
+      },
+      columnDefs: [
+            {
+                targets: 0,
+                render:  function ( data, type, row ) {
+                    return `<div class="flex">
+                          <div class="ml-3">
+                          <p class="text-gray-900 font-bold whitespace-no-wrap">`
+                              + data +
+                          `</p>
+                          </div>
+                      </div>`;
+                },
+                className: 'px-5 py-5 border-b border-gray-200 bg-white text-sm'
+            },
+            {
+                targets: 1,
+                render:  function ( data, type, row ) {
+                    return `<p class="text-gray-900 whitespace-no-wrap">`+data+`</p>`
+                    
+                },
+                className: 'px-5 py-5 border-b border-gray-200 bg-white text-sm'
+            },
+            {
+                targets: 0,
+                render:  function ( data, type, row ) {
+                    return `<div class="flex">
+                          <div class="ml-3">
+                          <p class="text-gray-900 font-bold whitespace-no-wrap">`
+                              + data +
+                          `</p>
+                          </div>
+                      </div>`;
+                },
+                className: 'px-5 py-5 border-b border-gray-200 bg-white text-sm'
+            }
+      ]
+  });
+  
+</script>
