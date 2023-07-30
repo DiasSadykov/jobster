@@ -10,7 +10,7 @@ def create_connection():
     """ create a database connection to a SQLite database """
     conn = None
     try:
-        conn = sqlite3.connect(DATABASE_LOCATION)
+        conn = sqlite3.connect(DATABASE_LOCATION, check_same_thread=False)
         print(sqlite3.version)
     except Error as e:
         print(e)
@@ -39,8 +39,9 @@ def create_db_if_not_exists():
             company TEXT,
             city TEXT,
             url TEXT UNIQUE,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            source TEXT
+            source TEXT,
+            is_new BOOLEAN NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
         );
     """
     create_table(conn, create_table_sql)

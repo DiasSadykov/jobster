@@ -1,5 +1,5 @@
 <div class="container mx-auto px-4 sm:px-8">
-    <div class="py-8">
+    <div class="mt-12 py-8 mb-36">
         <div class="flex flex-col items-center justify-center ">
             <h1 class="text-4xl font-bold tracking-tight text-slate-900 ">
                 Все вакансии в Казахстане 👩‍💻
@@ -8,108 +8,9 @@
                 Мы мониторим все IT вакансии в Казахстане и собираем их в одном месте
             </p>
         </div>
-      <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-        <div
-          class="inline-block overflow-hidden"
-        >
-          <table id="all_vacancies" class="min-w-full leading-normal">
-            <thead>
-              <tr>
-                <th
-                  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-                >
-                  Позиция
-                </th>
-                <th
-                  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-                >
-                  Компенсация
-                </th>
-                <th
-                  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-                >
-                  Компания
-                </th>
-                <th
-                  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-                >
-                  Город
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        {% with vacancies=all_vacancies,id="all_vacancies" %}
+          {% include "vacancies_table.html"%}
+        {% endwith %}
     </div>
   </div>
 </div>
-<script>
-  // template vacancies into js array
-  const vacancies = [
-    {% for vacancies_by_company in vacancies_sorted_by_company %}
-      {% for vacancy in vacancies_by_company %}
-        [
-          "{{vacancy.title}}",
-          "{{vacancy.company}}",
-          "{{vacancy.salary}}",
-          "{{vacancy.city}}",
-        ],
-      {% endfor %}
-    {% endfor %}
-  ];
-  new DataTable('#all_vacancies', {
-      columns: [
-          { title: 'Позиция' },
-          { title: 'Компания' },
-          { title: 'Компенсация' },
-          { title: 'Город' },
-      ],
-      data: vacancies,
-      initComplete: function(settings, json) {
-        $('.dataTables_filter').addClass('btn btn-sm btn-dark mb-2');
-        $('.dataTables_paginate').addClass('btn btn-sm btn-dark mt-2');
-        $('.dataTables_length').addClass('btn btn-sm btn-dark');
-        $('.dataTables_info').addClass('btn btn-sm btn-dark mt-2');
-        
-      },
-      columnDefs: [
-            {
-                targets: 0,
-                render:  function ( data, type, row ) {
-                    return `<div class="flex">
-                          <div class="ml-3">
-                          <p class="text-gray-900 font-bold whitespace-no-wrap">`
-                              + data +
-                          `</p>
-                          </div>
-                      </div>`;
-                },
-                className: 'px-5 py-5 border-b border-gray-200 bg-white text-sm'
-            },
-            {
-                targets: 1,
-                render:  function ( data, type, row ) {
-                    return `<p class="text-gray-900 whitespace-no-wrap">`+data+`</p>`
-                    
-                },
-                className: 'px-5 py-5 border-b border-gray-200 bg-white text-sm'
-            },
-            {
-                targets: 0,
-                render:  function ( data, type, row ) {
-                    return `<div class="flex">
-                          <div class="ml-3">
-                          <p class="text-gray-900 font-bold whitespace-no-wrap">`
-                              + data +
-                          `</p>
-                          </div>
-                      </div>`;
-                },
-                className: 'px-5 py-5 border-b border-gray-200 bg-white text-sm'
-            }
-      ]
-  });
-  
-</script>

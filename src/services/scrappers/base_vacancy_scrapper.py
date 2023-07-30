@@ -2,7 +2,7 @@ import asyncio
 import httpx
 from db.db import VacancyTable
 from services.models import Vacancy
-from services.telegram_reporting_service import TelegramReportingService
+from services.reporting.telegram_reporting_service import TelegramReportingService
 
 SCRAP_INTERVAL = 60 * 60 * 24
 
@@ -33,11 +33,8 @@ class VacancyScrapperBase:
                 new_vacancies_urls = set(vacancy.url for vacancy in new_vacancies)
                 added_vacancies_urls = new_vacancies_urls - old_vacancies_urls
                 added_vacancies = [new_vacancies_dict[url] for url in added_vacancies_urls]
-                # for vacancy in old_vacancies:
-                #     if vacancy.url not in new_vacancies_urls:
-                #         VacancyTable.delete_vacancy(vacancy.url)
                 self.save_in_db(new_vacancies)
-                await TelegramReportingService.report_added_vacancies_by_company_sorted(added_vacancies)
+                await TelegramReportingService.send_message_to_private_channel(f"Saved {len(added_vacancies)} in db")
             except Exception as e:
                 await TelegramReportingService.send_message_to_private_channel(f"Error in {self.source}: {e}")
             await asyncio.sleep(SCRAP_INTERVAL)

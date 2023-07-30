@@ -49,5 +49,5 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
                 salary = salary.text.strip()
             else:
                 salary = None
-            vacancies.append(Vacancy(title, link, salary, company, city, self.source))
+            vacancies.append(Vacancy(title=title, url=link, salary=salary, company=company, city=city, source=self.source, is_new=True))
         return vacancies

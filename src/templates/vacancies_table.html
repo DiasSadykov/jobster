@@ -1,0 +1,113 @@
+<table id="{{id}}">
+<thead>
+    <tr>
+    <th
+        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+    >
+        Позиция
+    </th>
+    <th
+        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+    >
+        Компенсация
+    </th>
+    <th
+        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+    >
+        Компания
+    </th>
+    <th
+        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+    >
+        Город
+    </th>
+    </tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<script>
+    new DataTable('#{{id}}', {
+        columns: [
+            { title: 'Позиция' },
+            { title: 'Компания' },
+            { title: 'Компенсация' },
+            { title: 'Город' },
+        ],
+        order: [],
+        data: [
+            {% for vacancy in vacancies %}
+                [
+                    "{{vacancy.title}}",
+                    "{{vacancy.company}}",
+                    "{{vacancy.salary or 'Зарплата не указана'}}",
+                    "{{vacancy.city}}",
+                    "{{vacancy.url}}",
+                ],
+            {% endfor %}
+        ],
+        initComplete: function(settings, json) {
+          $('.dataTables_filter').removeClass('dataTables_filter').addClass('font-semibold rounded-md');
+          $('input[aria-controls="{{id}}"]').addClass('input input-bordered w-full max-w-lg m-6 shadow').attr('id', 'tableSearch{{id}}');
+          $('.dataTables_paginate').addClass('p-6 font-bold');
+          $('.dataTables_length').remove();
+          $('.dataTables_info').addClass('p-6 font-bold');
+        },
+        columnDefs: [
+              {
+                  targets: 0,
+                  render:  function ( data, type, row ) {
+                      return `<a href=`+row[4]+` target='_blank'>
+                              <div class="flex text-xl h-20 hover:scale-105 transition">
+                                <p class="my-auto text-gray-900 font-bold whitespace-no-wrap">`
+                                  + data + `</p>
+                        </div></a>`;
+                  },
+                  className: 'border-b border-gray-200 bg-white text-sm'
+              },
+              {
+                  targets: [],
+                  render:  function ( data, type, row ) {
+                      return `<p class="text-gray-900 whitespace-no-wrap">`+data+`</p>`
+                      
+                  },
+                  className: 'h-20 border-b border-gray-200 bg-white text-sm'
+              },
+              {
+                  targets: [1,2],
+                  render:  function ( data, type, row ) {
+                      return `<div class="flex">
+                            <div class="ml-3">
+                            <p class="text-gray-900 font-bold whitespace-no-wrap">`
+                                + data +
+                            `</p>
+                            </div>
+                        </div>`;
+                  },
+                  className: 'h-20 border-b border-gray-200 bg-white text-sm'
+              },
+              {
+                  targets: [3],
+                  render:  function ( data, type, row ) {
+                      return `<span
+                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
+                        >
+                            <span
+                            aria-hidden
+                            class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                            ></span>
+                            <span class="relative">`+data +`</span>
+                        </span>`;
+                  },
+                  className: 'h-20 border-b border-gray-200 bg-white text-sm'
+              },
+        ]
+    });
+    var typed{{id}} = new Typed('#tableSearch{{id}}', {
+        strings: ['Junior', 'Javacript', 'Алматы'],
+        typeSpeed: 100,
+        backSpeed: 50,
+        attr: 'placeholder',
+        loop: true
+    });
+  </script>
