@@ -17,8 +17,7 @@ class VacancyTable:
                 salary = excluded.salary,
                 company = excluded.company,
                 city = excluded.city,
-                source = excluded.source,
-                is_new = excluded.is_new
+                source = excluded.source
             """,
             (
              vacancy.title,
