@@ -4,7 +4,7 @@ from db.db import VacancyTable
 from services.models import Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
-SCRAP_INTERVAL = 60 * 60 * 24
+SCRAP_INTERVAL = 60 * 60 * 12
 
 class VacancyScrapperBase:
     def __init__(self, url: str, source: str):
