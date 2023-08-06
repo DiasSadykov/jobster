@@ -59,11 +59,11 @@
                   render:  function ( data, type, row ) {
                       return `<a href=`+row[4]+` target='_blank'>
                               <div class="flex text-xl h-20 hover:scale-105 transition">
-                                <p class="my-auto text-gray-900 font-bold whitespace-no-wrap">`
+                                <p class="my-auto max-h-full overflow-hidden text-gray-900 font-bold">`
                                   + data + `</p>
                         </div></a>`;
                   },
-                  className: 'border-b border-gray-200 bg-white text-sm'
+                  className: 'h-20 border-b border-gray-200 bg-white text-sm'
               },
               {
                   targets: [],
