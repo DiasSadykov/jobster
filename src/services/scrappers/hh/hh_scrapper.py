@@ -11,7 +11,7 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
 
     async def scrap_page(self, page) -> int:
         url = self.url_base.format(page=page)
-        response = await self.client.get(url)
+        response = await self.client.get(url, follow_redirects=True)
         if response.status_code != 200:
             await TelegramReportingService.send_message_to_private_channel(f"[HH Scrapper] {response.status_code} on page {url}")
             raise Exception(f"Error {response.status_code} on page {url}")
