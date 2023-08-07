@@ -1,3 +1,4 @@
+from services.reporting.telegram_reporting_service import TelegramReportingService
 from services.scrappers.base.base_vacancy_scrapper import VacancyScrapperBase
 from services.models import Vacancy
 from bs4 import BeautifulSoup
@@ -12,6 +13,7 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
         url = self.url_base.format(page=page)
         response = await self.client.get(url)
         if response.status_code != 200:
+            await TelegramReportingService.send_message_to_private_channel(f"[HH Scrapper] {response.status_code} on page {url}")
             raise Exception(f"Error {response.status_code} on page {url}")
         return self.findData(response)
 
@@ -25,8 +27,6 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
         return vacancies
 
     def findData(self, response):
-        if response.status_code != 200:
-            return []
         soup = BeautifulSoup(response.text, 'html.parser')
         vacancies_raw = soup.find_all("div", {"class": "vacancy-serp-item-body__main-info"})
         vacancies = []
