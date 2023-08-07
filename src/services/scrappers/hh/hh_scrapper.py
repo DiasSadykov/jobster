@@ -1,4 +1,4 @@
-from .base_vacancy_scrapper import VacancyScrapperBase
+from services.scrappers.base.base_vacancy_scrapper import VacancyScrapperBase
 from services.models import Vacancy
 from bs4 import BeautifulSoup
 
