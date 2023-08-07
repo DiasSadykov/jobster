@@ -24,7 +24,7 @@ class VacancyScrapperBase:
 
     async def run(self):
         while True:
-            await TelegramReportingService.send_message_to_private_channel(f"Scrapping {self.source}")
+            await TelegramReportingService.send_message_to_private_channel(f"[{self.source} scrapper] Scrapping {self.source}")
             try:
                 old_vacancies = VacancyTable.get_by_source(self.source)
                 old_vacancies_urls = set(vacancy.url for vacancy in old_vacancies)
@@ -34,9 +34,9 @@ class VacancyScrapperBase:
                 added_vacancies_urls = new_vacancies_urls - old_vacancies_urls
                 added_vacancies = [new_vacancies_dict[url] for url in added_vacancies_urls]
                 self.save_in_db(new_vacancies)
-                await TelegramReportingService.send_message_to_private_channel(f"Saved {len(added_vacancies)} in db")
+                await TelegramReportingService.send_message_to_private_channel(f"[{self.source} scrapper] Saved {len(added_vacancies)} in db")
             except Exception as e:
-                await TelegramReportingService.send_message_to_private_channel(f"Error in {self.source}: {e}")
+                await TelegramReportingService.send_message_to_private_channel(f"[{self.source} scrapper]: Error: {e}")
             await asyncio.sleep(SCRAP_INTERVAL)
 
     async def findData(self):

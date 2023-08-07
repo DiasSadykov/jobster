@@ -13,16 +13,16 @@ class VacancyCheckerBase:
 
     async def run(self):
         while True:
-            await TelegramReportingService.send_message_to_private_channel(f"Checking {self.source}")
+            await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Checking {self.source}")
             try:
                 all_vacancies = VacancyTable.get_by_source(self.source)
                 for vacancy in all_vacancies:
                     if await self.check_closed(vacancy):
                         VacancyTable.delete_vacancy(vacancy.url)
-                        await TelegramReportingService.send_message_to_private_channel(f"Vacancy {vacancy.title} is closed")
+                        await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Vacancy {vacancy.title} is closed")
                     await asyncio.sleep(1)
             except Exception as e:
-                await TelegramReportingService.send_message_to_private_channel(f"Error in {self.source}: {e}")
+                await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Error: {e}")
             await asyncio.sleep(SCRAP_INTERVAL)
 
     async def check_closed(self, _):
