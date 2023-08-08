@@ -23,6 +23,7 @@ class VacancyCheckerBase:
                     await asyncio.sleep(1)
             except Exception as e:
                 await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Error: {e}")
+            await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: {self.source} check finished")
             await asyncio.sleep(SCRAP_INTERVAL)
 
     async def check_closed(self, _):

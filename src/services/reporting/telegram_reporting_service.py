@@ -51,6 +51,9 @@ class TelegramReportingService:
                 message += "\n"
             message += "\n"
 
+        message += "\n"
+        message += "Посмотреть все вакансии можно на сайте: https://techhunter.kz/"
+
         await TelegramReportingService.send_message_to_public_channel(message, thread_id=141)
 
     @staticmethod
