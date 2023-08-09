@@ -8,16 +8,22 @@ CHANNEL_ID = "-1001918708178"
 
 PRIVATE_CHANNEL_ID = "-1001836766800"
 
+bot = telegram.Bot(token=BOT_TOKEN)
+
 class TelegramReportingService:
     @staticmethod
     async def send_message_to_public_channel(message, thread_id=None):
-        bot = telegram.Bot(token=BOT_TOKEN)
-        await bot.send_message(chat_id=CHANNEL_ID, text=message, parse_mode="HTML", disable_web_page_preview=True, reply_to_message_id=thread_id)
+        try:
+            await bot.send_message(chat_id=CHANNEL_ID, text=message, parse_mode="HTML", disable_web_page_preview=True, reply_to_message_id=thread_id)
+        except Exception as e:
+            pass
 
     @staticmethod
     async def send_message_to_private_channel(message):
-        bot = telegram.Bot(token=BOT_TOKEN)
-        await bot.send_message(chat_id=PRIVATE_CHANNEL_ID, text=message, parse_mode="HTML")
+        try:
+            await bot.send_message(chat_id=PRIVATE_CHANNEL_ID, text=message, parse_mode="HTML", disable_web_page_preview=True)
+        except Exception as e:
+            pass
 
     @staticmethod
     def format_vacancy_with_link(vacancy: Vacancy):
