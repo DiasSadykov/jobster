@@ -4,10 +4,9 @@ import re
 from fastapi.templating import Jinja2Templates
 from db.db import VacancyTable
 from services.models import Employer, Vacancy
+from utils.salary import convert_salary_to_int
 
 templates = Jinja2Templates(directory="/app/src/templates")
-
-
 
 TOP_EMPLOYERS = {
     # "Kaspi.kz": Employer("Kaspi.kz", "Kaspi", "https://upload.wikimedia.org/wikipedia/ru/a/aa/Logo_of_Kaspi_bank.png"),
@@ -19,27 +18,10 @@ TOP_EMPLOYERS = {
     "ТОО\xa0AVIATA.KZ": Employer("ТОО\xa0AVIATA.KZ", "Aviata.kz", "https://play-lh.googleusercontent.com/OL3avfQvT_bmskEIkuqeopTHfcP5PosPf8ndu_vs2X8hvG3uDclVcbL-FYJS6D46ZFI=w480-h960-rw")
 }
 
-
 class TemplatingService:
-    def convert_salary_to_int(self, salary: str) -> int:
-        if not salary:
-            return 0
-        
-        salary = salary.replace(' ', '')
-        salary = salary.replace('\xa0', '')
-        salary = salary.replace('\u202f', '')
-        numbers = re.findall(r'\d+', salary)
-        average_salary = sum(map(int, numbers)) // len(numbers)
-        currency_symbol = salary[-1]
-        currency_rates = {'₸': 0.0025, '₽': 0.014, '€': 1.17}
-        if currency_symbol in currency_rates:
-            average_salary *= currency_rates[currency_symbol]
-        
-        return average_salary
-
     def get_all_vacancies_sorted_by_salary(self):
         all_vacancies = VacancyTable.get_all_vacancies()
-        all_vacancies.sort(key=lambda vacancy: self.convert_salary_to_int(vacancy.salary), reverse=True)
+        all_vacancies.sort(key=lambda vacancy: convert_salary_to_int(vacancy.salary), reverse=True)
         return all_vacancies
 
     def get_top_vacancies_by_company(self, all_vacancies: list[Vacancy]):

@@ -10,8 +10,7 @@ asyncio.set_event_loop(loop)
 
 def run_reporting_cron():
     try:
-        vacancies = VacancyTable.get_new_vacancies()
-        loop.run_until_complete(TelegramReportingService.report_added_vacancies_by_company_sorted(vacancies))
+        loop.run_until_complete(TelegramReportingService.report_added_vacancies_by_company_sorted())
         VacancyTable.set_new_vacancies_false()
     except Exception as e:
         loop.run_until_complete(TelegramReportingService.send_message_to_private_channel(f"Error in reporting cron: {e}"))
