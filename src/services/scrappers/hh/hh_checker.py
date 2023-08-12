@@ -22,5 +22,5 @@ class HHKZVacancyChecker(VacancyCheckerBase):
                 return True
             return False
         except Exception as e:
-            TelegramReportingService.send_message_to_private_channel(f"[HH Checker] Error: {e}")
+            await TelegramReportingService.send_message_to_private_channel(f"[HH Checker] Error: {e}")
             return False
