@@ -11,7 +11,6 @@ def create_connection():
     conn = None
     try:
         conn = sqlite3.connect(DATABASE_LOCATION, check_same_thread=False)
-        print(sqlite3.version)
     except Error as e:
         print(e)
     return conn
@@ -41,7 +40,8 @@ def create_db_if_not_exists():
             url TEXT UNIQUE,
             source TEXT,
             is_new BOOLEAN NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            tags TEXT
         );
     """
     create_table(conn, create_table_sql)

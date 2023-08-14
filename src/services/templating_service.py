@@ -1,12 +1,14 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
-import re
+import os
 from fastapi.templating import Jinja2Templates
 from db.db import VacancyTable
 from services.models import Employer, Vacancy
 from utils.salary import convert_salary_to_int
 
-templates = Jinja2Templates(directory="/app/src/templates")
+TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
+
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 TOP_EMPLOYERS = {
     # "Kaspi.kz": Employer("Kaspi.kz", "Kaspi", "https://upload.wikimedia.org/wikipedia/ru/a/aa/Logo_of_Kaspi_bank.png"),

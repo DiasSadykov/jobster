@@ -4,20 +4,23 @@ from services.models import Vacancy
 
 conn = create_connection()
 
+FIELDS = "title, url, salary, company, city, source, is_new, created_at, id, tags"
+
 class VacancyTable:
     @staticmethod
     def insert_vacancy(vacancy: Vacancy):
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO vacancy (title, url, salary, company, city, source, is_new)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO vacancy (title, url, salary, company, city, source, is_new, tags)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(url) DO UPDATE SET
                 title = excluded.title,
                 salary = excluded.salary,
                 company = excluded.company,
                 city = excluded.city,
-                source = excluded.source
+                source = excluded.source,
+                tags = excluded.tags
             """,
             (
              vacancy.title,
@@ -26,7 +29,8 @@ class VacancyTable:
              vacancy.company,
              vacancy.city,
              vacancy.source,
-             vacancy.is_new
+             vacancy.is_new,
+             vacancy.tags
             )
         )
         conn.commit()
@@ -42,7 +46,7 @@ class VacancyTable:
     @staticmethod
     def get_all_vacancies() -> list[Vacancy]:
         cursor = conn.cursor()
-        cursor.execute("SELECT title, url, salary, company, city, source, is_new, created_at, id FROM vacancy")
+        cursor.execute(f"SELECT {FIELDS} FROM vacancy")
         rows = cursor.fetchall()
         cursor.close()
         return [Vacancy(*row) for row in rows]
@@ -50,7 +54,7 @@ class VacancyTable:
     @staticmethod
     def get_by_source(source: str) -> list[Vacancy]:
         cursor = conn.cursor()
-        cursor.execute("SELECT title, url, salary, company, city, source, is_new, created_at, id FROM vacancy WHERE source=?", (source,))
+        cursor.execute(f"SELECT {FIELDS} FROM vacancy WHERE source=?", (source,))
         rows = cursor.fetchall()
         cursor.close()
         return [Vacancy(*row) for row in rows]
@@ -58,7 +62,7 @@ class VacancyTable:
     @staticmethod
     def get_new_vacancies() -> list[Vacancy]:
         cursor = conn.cursor()
-        cursor.execute("SELECT title, url, salary, company, city, source, is_new, created_at, id FROM vacancy WHERE is_new=1")
+        cursor.execute(f"SELECT {FIELDS} FROM vacancy WHERE is_new=1")
         rows = cursor.fetchall()
         cursor.close()
         return [Vacancy(*row) for row in rows]

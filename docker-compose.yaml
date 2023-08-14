@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     container_name: python_web_service
     ports:
       - "8000:8000"  # Replace the second port with the one your Python web service listens on
@@ -13,12 +14,14 @@ services:
       - ~/data:/data  # Mount a volume to store the database
     environment:
       - DATABASE_LOCATION=/data/db.sqlite3
+      - TEMPLATES_DIR=/app/src/templates
     command: ["python", "src/app.py"]  # Replace with the correct path to your web service script
 
   scraper:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     container_name: scraper_job
     volumes:
       - ./:/app  # Mount your scraper code to the container
@@ -32,6 +35,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     container_name: reporter_job
     volumes:
       - ./:/app  # Mount your scraper code to the container
