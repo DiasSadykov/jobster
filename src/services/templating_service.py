@@ -11,7 +11,7 @@ TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 TOP_EMPLOYERS = {
-    # "Kaspi.kz": Employer("Kaspi.kz", "Kaspi", "https://upload.wikimedia.org/wikipedia/ru/a/aa/Logo_of_Kaspi_bank.png"),
+    "Kaspi.kz": Employer("Kaspi.kz", "Kaspi", "https://upload.wikimedia.org/wikipedia/ru/a/aa/Logo_of_Kaspi_bank.png"),
     "Публичная Компания «Freedom Finance Global PLC»": Employer("Публичная Компания «Freedom Finance Global PLC»", "Freedom Finance", "https://media.licdn.com/dms/image/C4E03AQH8L4nbgcSh5w/profile-displayphoto-shrink_800_800/0/1517371174271?e=2147483647&v=beta&t=U8cxozb4hxNRDqionRI569isxd3vtl3-6k0SggSlHHQ"),
     "Яндекс": Employer("Яндекс", "Yandex", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Yandex_icon.svg/2048px-Yandex_icon.svg.png"),
     "АО\xa0Колеса": Employer("АО\xa0Колеса", "Колеса", "https://avatars.dzeninfra.ru/get-zen-logos/246004/pub_5b8f90f730712100ab841ac1_5b8f919f78944e00aa281d9e/xxh"),
