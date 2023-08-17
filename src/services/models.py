@@ -46,7 +46,7 @@ def extract_tags(vacancy: Vacancy):
     tags += extract_tag_by_keywords(vacancy, [".net"], ".net")
     tags += extract_tag_by_keywords(vacancy, ["golang", "go"], "golang")
     tags += extract_tag_by_keywords(vacancy, ["python"], "python")
-    tags += extract_tag_by_keywords(vacancy, ["java ", " java"], "java")
+    tags += extract_tag_by_keywords(vacancy, ["java"], "java_")
     tags += extract_tag_by_keywords(vacancy, ["c++"], "c++")
     tags += extract_tag_by_keywords(vacancy, ["c#"], "c#")
     tags += extract_tag_by_keywords(vacancy, ["php"], "php")
@@ -54,6 +54,9 @@ def extract_tags(vacancy: Vacancy):
     tags += extract_tag_by_keywords(vacancy, ["react"], "react")
     tags += extract_tag_by_keywords(vacancy, ["node"], "node")
     tags += extract_tag_by_keywords(vacancy, ["sql"], "sql")
+
+    if "javascript" in tags and "java_" in tags:
+        tags.remove("java_")
     return tags
 
 def check_words_in_title(title: str, words: list[str]):
