@@ -169,6 +169,7 @@
         }
         let regex = '';
         for (var filter in activeFilters{{id}}) {
+            filter = filter.replace('+', '\\+')
             regex += '(?=.*'+filter+')';
         }
         table{{id}}.columns(4).search(regex, true, false, true).draw();

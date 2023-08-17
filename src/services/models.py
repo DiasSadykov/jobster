@@ -46,7 +46,7 @@ def extract_tags(vacancy: Vacancy):
     tags += extract_tag_by_keywords(vacancy, [".net"], ".net")
     tags += extract_tag_by_keywords(vacancy, ["golang", "go"], "golang")
     tags += extract_tag_by_keywords(vacancy, ["python"], "python")
-    tags += extract_tag_by_keywords(vacancy, ["java"], "java")
+    tags += extract_tag_by_keywords(vacancy, ["java ", " java"], "java")
     tags += extract_tag_by_keywords(vacancy, ["c++"], "c++")
     tags += extract_tag_by_keywords(vacancy, ["c#"], "c#")
     tags += extract_tag_by_keywords(vacancy, ["php"], "php")
