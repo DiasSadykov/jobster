@@ -26,5 +26,8 @@ class VacancyCheckerBase:
             await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: {self.source} check finished")
             await asyncio.sleep(SCRAP_INTERVAL)
 
+    async def run_now(self):
+        pass
+
     async def check_closed(self, _):
         raise NotImplementedError("Method check_closed is not implemented")

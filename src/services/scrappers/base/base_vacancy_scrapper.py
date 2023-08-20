@@ -30,25 +30,31 @@ class VacancyScrapperBase:
         for vacancy in vacancies:
             VacancyTable.insert_vacancy(vacancy)
 
+    async def _run(self):
+        try:
+            await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Started Scrapping")
+            old_vacancies = VacancyTable.get_by_source(self.source)
+            old_vacancies_urls = set(vacancy.url for vacancy in old_vacancies)
+            new_vacancies = await self.scrap()
+            new_vacancies_dict = {vacancy.url: vacancy for vacancy in new_vacancies}
+            new_vacancies_urls = set(vacancy.url for vacancy in new_vacancies)
+            added_vacancies_urls = new_vacancies_urls - old_vacancies_urls
+            added_vacancies = [new_vacancies_dict[url] for url in added_vacancies_urls]
+            self.save_in_db(new_vacancies)
+            await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Saved {len(added_vacancies)} in db")
+        except Exception as e:
+            await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}]: Error: {e}")
+
     async def run(self):
         while True:
             if datetime.now() < self.next_run_time:
                 await asyncio.sleep(1)
                 continue
             self.next_run_time = self.next_run_time + timedelta(hours=self.interval_hours)
-            await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Started Scrapping")
-            try:
-                old_vacancies = VacancyTable.get_by_source(self.source)
-                old_vacancies_urls = set(vacancy.url for vacancy in old_vacancies)
-                new_vacancies = await self.scrap()
-                new_vacancies_dict = {vacancy.url: vacancy for vacancy in new_vacancies}
-                new_vacancies_urls = set(vacancy.url for vacancy in new_vacancies)
-                added_vacancies_urls = new_vacancies_urls - old_vacancies_urls
-                added_vacancies = [new_vacancies_dict[url] for url in added_vacancies_urls]
-                self.save_in_db(new_vacancies)
-                await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Saved {len(added_vacancies)} in db")
-            except Exception as e:
-                await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}]: Error: {e}")
+            await self._run()
+
+    async def run_now(self):
+        await self._run()
 
     async def findData(self):
         raise NotImplementedError("Method findData is not implemented")

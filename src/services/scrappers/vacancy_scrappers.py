@@ -12,5 +12,8 @@ ALL_SCRAPPERS = [
                     HHKZVacancyScrapper("vacancies/programmist?", "hh.kz programmer", hour=START_HOUR, minute=START_MINUTE+12),
                     HHKZVacancyScrapper("vacancies/dizajner-interfejsov?", "hh.kz designer", hour=START_HOUR, minute=START_MINUTE+14),
                     HHKZVacancyScrapper("vacancies/sistemnyy_administrator?", "hh.kz sysadmin", hour=START_HOUR, minute=START_MINUTE+16),
-                    HHKZVacancyChecker()
             ]
+
+ALL_CHECKERS = [
+                    HHKZVacancyChecker()   
+]

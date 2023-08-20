@@ -1,8 +1,10 @@
 import asyncio
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin, urlparse
+
 from services.reporting.telegram_reporting_service import TelegramReportingService
 from services.scrappers.base.base_vacancy_scrapper import VacancyScrapperBase
 from services.models import Vacancy
-from bs4 import BeautifulSoup
 
 MAX_PAGE = 100
 
@@ -38,9 +40,10 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
             raise Exception(f"[{self.log_tag}] did not find vacancies on page {response.url}")
         vacancies = []
         for vacancy_raw in vacancies_raw:
-            title_and_link = vacancy_raw.find("a", {"class": "serp-item__title"})
-            title = title_and_link.text
-            link = title_and_link.get("href")
+            title_and_url = vacancy_raw.find("a", {"class": "serp-item__title"})
+            title = title_and_url.text
+            url = title_and_url.get("href")
+            url = urljoin(url, urlparse(url).path)
             city = vacancy_raw.find("div", {"data-qa": "vacancy-serp__vacancy-address"})
             if city:
                 city = city.text.strip()
@@ -56,5 +59,5 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
                 salary = salary.text.strip()
             else:
                 salary = None
-            vacancies.append(Vacancy(title=title, url=link, salary=salary, company=company, city=city, source=self.source, is_new=True))
+            vacancies.append(Vacancy(title=title, url=url, salary=salary, company=company, city=city, source=self.source, is_new=True))
         return vacancies
