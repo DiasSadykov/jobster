@@ -15,6 +15,7 @@ services:
     environment:
       - DATABASE_LOCATION=/data/db.sqlite3
       - TEMPLATES_DIR=/app/src/templates
+      - BOT_TOKEN=${BOT_TOKEN}  # Replace with your Telegram bot token
     command: ["python", "src/app.py"]  # Replace with the correct path to your web service script
 
   scraper:
