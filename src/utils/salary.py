@@ -10,7 +10,7 @@ def convert_salary_to_int(salary: str) -> int:
     numbers = re.findall(r'\d+', salary)
     average_salary = sum(map(int, numbers)) // len(numbers)
     currency_symbol = salary[-1]
-    currency_rates = {'₸': 0.0025, '₽': 0.014, '€': 1.17}
+    currency_rates = {'₸': 0.0021, '₽': 0.011, '€': 1.17}
     if currency_symbol in currency_rates:
         average_salary *= currency_rates[currency_symbol]
 
