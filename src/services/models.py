@@ -4,7 +4,9 @@ from dataclasses import dataclass
 @dataclass
 class Vacancy:
     title: str
-    url: str
+    description: str = None
+    created_by: int = None
+    url: str = None
     salary: str = None
     company: str = None
     city: str = None
@@ -72,3 +74,12 @@ class Employer:
     db_name: str
     shown_name: str
     logo: str
+
+
+@dataclass
+class User:
+    id: str = None
+    email: str = None
+    password: str = None
+    balance: int = None
+    created_at: int = None

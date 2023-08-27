@@ -2,7 +2,7 @@ import asyncio
 from datetime import datetime, timedelta
 import random
 import httpx
-from db.db import VacancyTable
+from db.vacancy_table import VacancyTable
 from services.models import Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 

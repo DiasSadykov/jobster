@@ -1,0 +1,60 @@
+<form action="/post_vacancy" method="post" class="space-y-4">
+    <div>
+        <div class="form-control">
+            <label class="label">
+              <span class="label-text">Заголовок</span>
+            </label>
+            <input required name="title" type="text" placeholder="Middle Python Developer " class="input input-bordered input-md w-full max-w-xs" />
+        </div>
+    </div>
+    <div>
+        <div class="form-control">
+            <label class="label">
+              <span class="label-text">Компания</span>
+            </label>
+            <input required name="company" type="text" placeholder="Arbuz.kz" class="input input-bordered input-md w-full max-w-xs" />
+        </div>
+    </div>
+    <div>
+        <div class="form-control">
+            <label class="label">
+              <span class="label-text">Описание вакансии</span>
+            </label>
+            <textarea required name="description" class="textarea textarea-bordered h-72" placeholder="Команда Arbuz ищет Middle Python разработчика..."></textarea>
+        </div>
+    </div>
+    <div>
+        <div class="form-control">
+            <label class="label">
+              <span class="label-text">Зарплата</span>
+            </label>
+            <input required name="salary" class="input input-bordered input-md w-full max-w-xs" placeholder="500 000 – 800 000 ₸"></textarea>
+        </div>
+    </div>
+    <div>
+        <div class="form-control">
+            <label class="label">
+              <span class="label-text">Город</span>
+            </label>
+            <input required name="city" class="input input-bordered input-md w-full max-w-xs" placeholder="Алматы"></textarea>
+        </div>
+    </div>
+    <div>
+        <div class="form-control">
+            <label class="label">
+              <span class="label-text">Теги</span>
+            </label>
+            <input name="tags" type="text" placeholder="middle,python" class="input input-bordered input-md w-full max-w-xs" />
+        </div>
+    </div>
+    <br/>
+    {% if error %}
+    <div class="alert alert-error">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>{{error}}</span>
+    </div>
+    {% endif %}
+    <div>
+        <button class="btn btn-block btn-info">Опубликовать с выводом в топ (10000 KZT)</button>
+    </div>
+</form>

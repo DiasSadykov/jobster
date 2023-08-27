@@ -2,9 +2,10 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 import os
 from fastapi.templating import Jinja2Templates
-from db.db import VacancyTable
+from db.vacancy_table import VacancyTable
 from services.models import Employer, Vacancy
 from utils.salary import convert_salary_to_int
+from utils.vacancies import calculate_promotion
 
 TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
 
@@ -21,9 +22,9 @@ TOP_EMPLOYERS = {
 }
 
 class TemplatingService:
-    def get_all_vacancies_sorted_by_salary(self):
+    def get_all_vacancies_sorted(self):
         all_vacancies = VacancyTable.get_all_vacancies()
-        all_vacancies.sort(key=lambda vacancy: convert_salary_to_int(vacancy.salary), reverse=True)
+        all_vacancies.sort(key=lambda vacancy: (calculate_promotion(vacancy)+convert_salary_to_int(vacancy.salary)), reverse=True)
         return all_vacancies
 
     def get_top_vacancies_by_company(self, all_vacancies: list[Vacancy]):
@@ -41,12 +42,28 @@ class TemplatingService:
                 new_vacancies.append(vacancy)
         return new_vacancies
 
+    def format_vacancies(self, vacancies: list[Vacancy]):
+        for vacancy in vacancies:
+            if vacancy.source == "techhunter.kz":
+                vacancy.title = "🔥 " + vacancy.title
+            if datetime.fromisoformat(vacancy.created_at) > datetime.now() - timedelta(days=1):
+                vacancy.title = "🆕 " + vacancy.title
+                if vacancy.tags:
+                    vacancy.tags += ",new"
+                else:
+                    vacancy.tags = "new"
+        return vacancies
+        
+
     def render_root_page(self, request):
-        all_vacancies = self.get_all_vacancies_sorted_by_salary()
-        new_vacancies = self.get_new_vacancies(all_vacancies)
+        all_vacancies = self.get_all_vacancies_sorted()
+        all_vacancies = self.format_vacancies(all_vacancies)
         top_vacancies_by_company = self.get_top_vacancies_by_company(all_vacancies)
         return templates.TemplateResponse("index.html", {"request": request, 
                                                          "top_employers": TOP_EMPLOYERS.values(), 
                                                          "top_vacancies_by_company": top_vacancies_by_company, 
-                                                         "all_vacancies": all_vacancies, 
-                                                         "new_vacancies": new_vacancies})
+                                                         "all_vacancies": all_vacancies})
+
+    def render_vacancy(self, request, id: int):
+        vacancy = VacancyTable.get_by_id(id)
+        return templates.TemplateResponse("vacancy.html", {"request":request, "vacancy": vacancy})

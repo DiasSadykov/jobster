@@ -1,6 +1,6 @@
 import os
 import telegram
-from db.db import VacancyTable
+from db.vacancy_table import VacancyTable
 
 from services.models import Vacancy
 from utils.salary import convert_salary_to_int

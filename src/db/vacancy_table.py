@@ -1,10 +1,6 @@
-from db.utils import create_connection
-
 from services.models import Vacancy
-
-conn = create_connection()
-
-FIELDS = "title, url, salary, company, city, source, is_new, created_at, id, tags"
+from db.utils import conn
+FIELDS = "title, description, created_by, url, salary, company, city, source, is_new, created_at, id, tags"
 
 class VacancyTable:
     @staticmethod
@@ -12,8 +8,8 @@ class VacancyTable:
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO vacancy (title, url, salary, company, city, source, is_new, tags)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO vacancy (title, description, created_by, url, salary, company, city, source, is_new, tags)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(url) DO UPDATE SET
                 title = excluded.title,
                 salary = excluded.salary,
@@ -24,6 +20,8 @@ class VacancyTable:
             """,
             (
              vacancy.title,
+             vacancy.description,
+             vacancy.created_by,
              vacancy.url,
              vacancy.salary,
              vacancy.company,
@@ -33,6 +31,13 @@ class VacancyTable:
              vacancy.tags
             )
         )
+        conn.commit()
+        cursor.close()
+        return cursor.lastrowid
+
+    def update_url(id: int, url: str):
+        cursor = conn.cursor()
+        cursor.execute("UPDATE vacancy SET url=? WHERE id=?", (url, id))
         conn.commit()
         cursor.close()
 
@@ -58,6 +63,14 @@ class VacancyTable:
         rows = cursor.fetchall()
         cursor.close()
         return [Vacancy(*row) for row in rows]
+
+    @staticmethod
+    def get_by_id(id: int) -> Vacancy:
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT {FIELDS} FROM vacancy WHERE id=?", (id,))
+        row = cursor.fetchone()
+        cursor.close()
+        return Vacancy(*row) if row else None
 
     @staticmethod
     def get_new_vacancies() -> list[Vacancy]:

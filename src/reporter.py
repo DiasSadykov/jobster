@@ -2,7 +2,7 @@ import asyncio
 import datetime
 import time
 import schedule
-from db.db import VacancyTable
+from db.vacancy_table import VacancyTable
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 loop = asyncio.new_event_loop()

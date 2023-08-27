@@ -1,6 +1,12 @@
 
 {% set filter_class = 'text-2xl p-5 lg:text-sm lg:p-2 font-semibold badge badge-lg badge-primary badge-outline m-1' %}
+<div class="flex flex-row mx-6 justify-center mb-6">
+    <button class="filter-button-{{id}} {{filter_class}}" data-filter="new">New (Последние 24 часа)</button>
+</div>
 <div class="flex flex-row justify-center">
+    <div class="flex flex-col mx-6">
+        <button class="filter-button-{{id}} {{filter_class}}" data-filter="remote">Remote</button>
+    </div>
     <div class="flex flex-col mx-6">
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="intern">Intern</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="junior">Junior</button>
@@ -77,7 +83,12 @@
 <script>
     table{{id}} = new DataTable('#{{id}}', {
         createdRow: function( row, data, dataIndex ) {
-            $(row).addClass( 'border-2 border-black p-2 shadow rounded hover:scale-105 transition' );
+            let className = 'border-2 rounded-xl border-black hover:scale-105 p-2 shadow rounded  transition'
+            if (data[6] == "techhunter.kz") {
+                className += ' !bg-purple-50 overflow-hidden' ;
+            }
+            console.log(className)
+            $(row).addClass(className);
         },
         columns: [
             { title: 'Позиция' },
@@ -96,6 +107,7 @@
                     "{{vacancy.city}}",
                     "{{vacancy.tags}}",
                     "{{vacancy.url}}",
+                    "{{vacancy.source}}"
                 ],
             {% endfor %}
         ],
@@ -109,7 +121,7 @@
           $('#{{id}}_filter label').addClass('mb-12 flex items-center text-6xl lg:text-4xl mt-8 font-extrabold').contents().filter(function(){ return this.nodeType != 1; }).remove();
           $('#{{id}}_filter label').prepend('🔎')
         },
-        {% set column_class = 'h-32 lg:h-20 border-gray-200 bg-white text-2xl xl:text-xl' %}
+        {% set column_class = 'h-32 lg:h-20 border-gray-200 text-2xl lg:text-xl' %}
         columnDefs: [
               {
                   targets: 0,
@@ -120,7 +132,7 @@
                                   + data + `</p>
                         </div></a>`;
                   },
-                  className: '{{column_class}}'
+                  className: '{{column_class}}' + ' rounded-l-xl'
               },
               {
                   targets: [],
@@ -135,7 +147,7 @@
                   render:  function ( data, type, row ) {
                       return `<div class="flex">
                             <div class="ml-3">
-                            <p class="text-gray-900 font-bold whitespace-no-wrap">`
+                            <p class="text-gray-900 font-medium text-xl lg:text-base whitespace-no-wrap">`
                                 + data +
                             `</p>
                             </div>
@@ -147,7 +159,7 @@
                   targets: [3],
                   render:  function ( data, type, row ) {
                       return `<span
-                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
+                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight text-xl lg:text-base"
                         >
                             <span
                             aria-hidden
@@ -156,7 +168,7 @@
                             <span class="relative">`+data +`</span>
                         </span>`;
                   },
-                  className: '{{column_class}}'
+                  className: '{{column_class}}'  + ' rounded-r-xl'
               },
               {
                     target: 4,

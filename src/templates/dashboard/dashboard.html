@@ -1,0 +1,63 @@
+<html data-theme="light">
+    {% include "static/headers.html" without context %}
+    <div class="navbar bg-red-600 color-white">
+        <div class="flex-1">
+            <a href="/" class="btn btn-ghost normal-case text-xl text-white">
+                <div class="w-10 rounded-full">
+                    <img src="https://i.postimg.cc/vZDH6jyp/Untitled-11.png">
+                </div>
+                TechHunter
+            </a>
+        </div>
+        <div class="flex-none">
+            <p class="font-bold normal-case text-xl text-white mx-2">{{user.email}}</p>
+        </div>
+        <div class="flex-none">
+            <p class="font-bold normal-case text-xl text-white">Баланс: {{user.balance}} KZT</p>
+        </div>
+        <div class="flex-none">
+            <a href="https:t.me/techhuntersupport" class="btn btn-ghost normal-case text-xl text-white mx-2">Поддержка/Пополнить баланс</a>
+        </div>
+        <form class="m-0" action="/logout" method="post">
+            <button name="logout" value="upvote" class="btn btn-ghost normal-case text-xl text-white mx-2">Выйти</button>
+        </form>
+    </div>
+    {%include "dashboard/faq.html" without context%}
+
+    <div class="relative flex flex-row justify-center overflow-hidden p-6">
+        <div class="stats shadow-lg mx-2">
+            <div class="stat">
+                <div class="stat-title">Посещений TechHunter в этом месяце</div>
+                <div class="stat-value">15000+</div>
+                <div class="stat-desc">Последние 28 дней</div>
+            </div>
+        </div>
+        <div class="stats shadow-lg mx-2">
+            <div class="stat">
+                <div class="stat-title">Уникальных пользователей</div>
+                <div class="stat-value">10000+</div>
+                <div class="stat-desc">Последние 28 дней</div>
+            </div>
+        </div>
+        <div class="stats shadow-lg mx-2">
+            <div class="stat">
+                <div class="stat-title">Участников сообщества в Телеграмм</div>
+                <div class="stat-value">2000+</div>
+                <div class="stat-desc">Последние 28 дней</div>
+            </div>
+        </div>
+    </div>
+    <div class="relative flex flex-row justify-center overflow-hidden mt-12">
+        <p class="text-2xl font-bold">Ваша вакансия будет выглядеть так:</p>
+    </div>
+    <div class="relative flex flex-row justify-center overflow-hidden p-6">
+        <img class="border rounded-xl w-96" src="https://i.postimg.cc/wBD3d11B/2023-08-27-17-44-08.png"/>
+    </div>
+    <div class="relative flex flex-col justify-center overflow-hidden">
+        <div class="w-full p-6 m-auto bg-white rounded-md shadow-lg  lg:max-w-xl mt-12 mb-12">
+            <h1 class="text-3xl font-bold text-center text-gray-700 mb-12">Опубликовать вакансию</h1>
+            {%include "dashboard/vacancy_form.html"%}
+        </div>
+    </div>
+    {%include "dashboard/footer.html" without context%}
+</html>

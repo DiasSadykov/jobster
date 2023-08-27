@@ -34,7 +34,7 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
 
     async def findData(self, response):
         soup = BeautifulSoup(response.text, 'html.parser')
-        vacancies_raw = soup.find_all("div", {"class": "vacancy-serp-item-body__main-info"})
+        vacancies_raw = soup.find_all("div", {"class": "vacancy-serp-item__layout"})
         if not vacancies_raw:
             await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] did not find vacancies on page {response.url}")
             raise Exception(f"[{self.log_tag}] did not find vacancies on page {response.url}")
@@ -59,5 +59,11 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
                 salary = salary.text.strip()
             else:
                 salary = None
-            vacancies.append(Vacancy(title=title, url=url, salary=salary, company=company, city=city, source=self.source, is_new=True))
+            remote = vacancy_raw.find("div", {"data-qa": "vacancy-label-remote-work-schedule"})
+            tags = None
+            if remote:
+                print("remote")
+                tags = "remote"
+
+            vacancies.append(Vacancy(title=title, url=url, salary=salary, company=company, city=city, tags=tags, source=self.source, is_new=True))
         return vacancies

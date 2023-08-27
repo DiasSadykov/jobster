@@ -30,10 +30,12 @@ def create_table(conn, create_table_sql):
 
 def create_db_if_not_exists():
     conn = create_connection()
-    create_table_sql = """
+    create_vacancy_table_sql = """
         CREATE TABLE IF NOT EXISTS vacancy (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
+            description TEXT,
+            created_by INTEGER,
             salary TEXT,
             company TEXT,
             city TEXT,
@@ -44,4 +46,16 @@ def create_db_if_not_exists():
             tags TEXT
         );
     """
-    create_table(conn, create_table_sql)
+    create_user_table_sql = """
+            CREATE TABLE IF NOT EXISTS user (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            balance INTEGER NOT NULL DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+        );
+    """
+    create_table(conn, create_vacancy_table_sql)
+    create_table(conn, create_user_table_sql)
+
+conn = create_connection()
