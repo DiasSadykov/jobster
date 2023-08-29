@@ -12,7 +12,7 @@ class HHKZVacancyChecker(VacancyCheckerBase):
     async def check_closed(self, vacancy: Vacancy):
         try:
             url = vacancy.url
-            response = await self.client.get(vacancy.url, follow_redirects=True, timeout=2)
+            response = await self.client.get(vacancy.url, follow_redirects=True, timeout=5)
             if response.status_code != 200:
                 await TelegramReportingService.send_message_to_private_channel(f"[HH Checker] {response.status_code} on page {url}")
                 return False

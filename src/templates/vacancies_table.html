@@ -1,11 +1,15 @@
 
 {% set filter_class = 'text-2xl p-5 lg:text-sm lg:p-2 font-semibold badge badge-lg badge-primary badge-outline m-1' %}
+<div class="alert mb-8">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <span>Знаешь того кому может быть интересна вакансия на нашем сайте? Поделись ссылкой на сайт c другом 🔗</span>
+</div>
 <div class="flex flex-row mx-6 justify-center mb-6">
-    <button class="filter-button-{{id}} {{filter_class}}" data-filter="new">🆕 New (Последние 24 часа)</button>
+    <button class="filter-button-{{id}} {{filter_class}}" data-filter="new">🆕&nbsp;&nbsp;New (Последние 24 часа)</button>
 </div>
 <div class="flex flex-row justify-center">
     <div class="flex flex-col mx-4">
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="remote">🌎 Remote</button>
+        <button class="filter-button-{{id}} {{filter_class}}" data-filter="remote">🌎&nbsp;&nbsp;Remote</button>
     </div>
     <div class="flex flex-col ml-8 lg:ml-16">
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="intern">Intern</button>
