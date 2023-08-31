@@ -16,8 +16,8 @@ class VacancyScrapperBase:
         self.minute = minute
         self.interval_hours = interval_hours
         next_run_time = datetime.now().replace(hour=hour, minute=minute, second=0, microsecond=0)
-        if next_run_time < datetime.now():
-            next_run_time = next_run_time.replace(day=next_run_time.day + 1)
+        while next_run_time < datetime.now():
+            next_run_time = next_run_time + timedelta(hours=self.interval_hours)
         self.next_run_time = next_run_time
 
     async def scrap(self) -> list[Vacancy]:
