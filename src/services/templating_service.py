@@ -21,6 +21,33 @@ TOP_EMPLOYERS = {
     "ТОО\xa0AVIATA.KZ": Employer("ТОО\xa0AVIATA.KZ", "Aviata.kz", "https://play-lh.googleusercontent.com/OL3avfQvT_bmskEIkuqeopTHfcP5PosPf8ndu_vs2X8hvG3uDclVcbL-FYJS6D46ZFI=w480-h960-rw")
 }
 
+job_tag_to_localized_job_title = {
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "fullstack": "Fullstack",
+    "qa": "QA",
+    "ios": "iOS",
+    "android": "Android",
+    "product": "Product",
+    "data": "Data",
+    "design": "Design",
+    "analyst": "Analyst",
+    "sysadmin": "Системный администратор",
+    "devops": "DevOps",
+    "golang": "Golang",
+    "python": "Python",
+    "java_": "Java",
+    "php": "PHP",
+    "javascript": "JavaScript",
+    "react": "React"
+}
+
+city_tag_to_localized_city_title = {
+    "almaty": "Алматы",
+    "astana": "Астана"
+}
+
+
 class TemplatingService:
     def get_all_vacancies_sorted(self):
         all_vacancies = VacancyTable.get_all_vacancies()
@@ -63,6 +90,24 @@ class TemplatingService:
                                                          "top_employers": TOP_EMPLOYERS.values(), 
                                                          "top_vacancies_by_company": top_vacancies_by_company, 
                                                          "all_vacancies": all_vacancies})
+
+    def translate_description_into_city_and_job_title(self, description: str):
+        [job_tag, city_tag] = description.split("-")[1:]
+        city_tag = city_tag.strip()
+        job_tag = job_tag.strip()
+        if job_tag == "java":
+            job_tag = "java_"
+        job_title = job_tag_to_localized_job_title.get(job_tag, job_tag)
+        city_title = city_tag_to_localized_city_title.get(city_tag, city_tag)
+        return [city_title, job_title, job_tag]
+
+
+    def render_jobs_page(self, request, description: str):
+        all_vacancies = self.get_all_vacancies_sorted()
+        all_vacancies = self.format_vacancies(all_vacancies)
+        [city_title, job_title, job_tag] = self.translate_description_into_city_and_job_title(description)
+        return templates.TemplateResponse("jobs_with_description.html", {"request": request, 
+                                                         "all_vacancies": all_vacancies, "page_title": f"Вакансии {job_title} в {city_title}", "city_title": city_title, "job_title": job_title, "job_tag": job_tag})
 
     def render_vacancy(self, request, id: int):
         vacancy = VacancyTable.get_by_id(id)

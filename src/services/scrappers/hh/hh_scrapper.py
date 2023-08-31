@@ -62,7 +62,6 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
             remote = vacancy_raw.find("div", {"data-qa": "vacancy-label-remote-work-schedule"})
             tags = None
             if remote:
-                print("remote")
                 tags = "remote"
 
             vacancies.append(Vacancy(title=title, url=url, salary=salary, company=company, city=city, tags=tags, source=self.source, is_new=True))

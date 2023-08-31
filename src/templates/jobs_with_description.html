@@ -1,0 +1,25 @@
+<html data-theme="light">
+    {% include "static/headers.html"%}
+<body>
+    {% include "static/navbar.html" without context %}
+    <div class="mx-5 xl:mx-20 mt-12">
+        <div class="container min-w-full mx-auto px-4 lg:px-8">
+            <div class="mt-2 py-8">
+                <div class="flex flex-col items-center justify-center ">
+                    <h1 class="text-6xl lg:text-4xl font-bold tracking-tight text-slate-900 ">
+                        Вакансии {{job_title}} в {{city_title}} 👩‍💻
+                    </h1>
+                    <p class="text-2xl lg:text-xl font-light mt-2 mb-8">
+                        Мы мониторим все IT вакансии в Казахстане и собираем их в одном месте
+                    </p>
+                </div>
+                {% with vacancies=all_vacancies,id="all_vacancies" %}
+                  {% include "vacancies_table.html"%}
+                {% endwith %}
+            </div>
+        </div>        
+    </div>
+    {% include "static/footer.html" %}
+    {% include "static/cookie.html" without context %}
+</body>
+</html>

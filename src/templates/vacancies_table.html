@@ -84,7 +84,30 @@
 <tbody>
 </tbody>
 </table>
-<script>
+<script>    
+    var activeFilters{{id}} = {
+        {% if job_tag %}
+            "{{job_tag}}": true,
+        {% endif %}
+    };
+
+    $('.filter-button-{{id}}').click(function() {
+        var filter = $(this).data('filter');
+        if (activeFilters{{id}}[filter]) {
+            delete activeFilters{{id}}[filter];
+            $(this).addClass('badge-outline');
+        } else {
+            activeFilters{{id}}[filter] = true;
+            $(this).removeClass('badge-outline');
+        }
+        let regex = '';
+        for (var filter in activeFilters{{id}}) {
+            filter = filter.replace('+', '\\+')
+            regex += '(?=.*'+filter+')';
+        }
+        table{{id}}.columns(4).search(regex, true, false, true).draw();
+    });
+
     table{{id}} = new DataTable('#{{id}}', {
         createdRow: function( row, data, dataIndex ) {
             let className = 'border-2 rounded-xl border-black hover:scale-105 p-2 shadow rounded  transition'
@@ -124,6 +147,22 @@
           $('#{{id}}_filter').addClass('flex justify-center');
           $('#{{id}}_filter label').addClass('mb-12 flex items-center text-6xl lg:text-4xl mt-8 font-extrabold').contents().filter(function(){ return this.nodeType != 1; }).remove();
           $('#{{id}}_filter label').prepend('🔎')
+
+        for (var filter in activeFilters{{id}}) {
+            $(`[data-filter=${filter}]`).removeClass('badge-outline');
+        }
+
+        let regex = '';
+        for (var filter in activeFilters{{id}}) {
+            filter = filter.replace('+', '\\+')
+            regex += '(?=.*'+filter+')';
+        }
+
+        table = settings.oInstance.api();
+        table.columns(4).search(regex, true, false, true).draw();
+        {% if job_tag %}
+            table.columns(3).search("(?=.*{{city_title}})", true, false, true).draw();
+        {% endif %}
         },
         {% set column_class = 'h-32 lg:h-20 border-gray-200 text-2xl lg:text-xl' %}
         columnDefs: [
@@ -179,24 +218,6 @@
                     visible: false
               }
         ]
-    });
-    var activeFilters{{id}} = {};
-
-    $('.filter-button-{{id}}').click(function() {
-        var filter = $(this).data('filter');
-        if (activeFilters{{id}}[filter]) {
-            delete activeFilters{{id}}[filter];
-            $(this).addClass('badge-outline');
-        } else {
-            activeFilters{{id}}[filter] = true;
-            $(this).removeClass('badge-outline');
-        }
-        let regex = '';
-        for (var filter in activeFilters{{id}}) {
-            filter = filter.replace('+', '\\+')
-            regex += '(?=.*'+filter+')';
-        }
-        table{{id}}.columns(4).search(regex, true, false, true).draw();
     });
 
     var typed{{id}} = new Typed('#tableSearch{{id}}', {

@@ -20,6 +20,10 @@ recruiter_service = RecruiterService()
 async def index(request: Request):
     return templating_service.render_root_page(request)
 
+@app.get("/jobs/{description}", response_class=HTMLResponse)
+async def post_vacancy(request: Request, description: str):
+    return templating_service.render_jobs_page(request, description)
+
 @app.get("/vacancy/{id}", response_class=HTMLResponse)
 async def get_vacancy(request: Request, id: int):
     return templating_service.render_vacancy(request, id)

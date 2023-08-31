@@ -15,7 +15,7 @@ class RecruiterService:
     def render_dashboard_page(self, request, user: User):
         if not user:
             return templates.TemplateResponse("login/login.html", {"request": request})
-        return templates.TemplateResponse("dashboard/dashboard.html", {"request": request, "user": user})
+        return templates.TemplateResponse("dashboard/dashboard.html", {"request": request, "user": user, "page_title": "TechHunter - Кабинет Рекрутера"})
 
     async def post_vacancy(self, request: Request, user: User):
         if not user:
