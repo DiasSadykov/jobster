@@ -32,7 +32,7 @@ job_tag_to_localized_job_title = {
     "data": "Data",
     "design": "Design",
     "analyst": "Analyst",
-    "sysadmin": "Системный администратор",
+    "sysadmin": "Системный Администратор",
     "devops": "DevOps",
     "golang": "Golang",
     "python": "Python",
