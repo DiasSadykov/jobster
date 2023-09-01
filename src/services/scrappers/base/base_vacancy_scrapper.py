@@ -19,6 +19,7 @@ class VacancyScrapperBase:
         while next_run_time < datetime.now():
             next_run_time = next_run_time + timedelta(hours=self.interval_hours)
         self.next_run_time = next_run_time
+        print(self.next_run_time, self.next_run_time.tzinfo)
 
     async def scrap(self) -> list[Vacancy]:
         # take all vacancies from db in a set and then compare with new vacancies
