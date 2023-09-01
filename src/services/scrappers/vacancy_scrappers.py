@@ -1,8 +1,8 @@
 from .hh.hh_scrapper import HHKZVacancyScrapper
 from .hh.hh_checker import HHKZVacancyChecker
 
-START_HOUR = 21
-START_MINUTE = 40
+START_HOUR = 10
+START_MINUTE = 1
 ALL_SCRAPPERS = [
                     HHKZVacancyScrapper("search/vacancy?text=Qa&from=suggest_post&salary=&ored_clusters=true&area=40&items_on_page=20&", "hh.kz qa", hour=START_HOUR, minute=START_MINUTE+2),
                     HHKZVacancyScrapper("search/vacancy?text=Product+Manager&salary=&no_magic=true&ored_clusters=true&area=40&items_on_page=20&", "hh.kz product manager", hour=START_HOUR, minute=START_MINUTE+4),
