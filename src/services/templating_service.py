@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import os
 from fastapi.templating import Jinja2Templates
 from db.vacancy_table import VacancyTable
-from services.models import Employer, Vacancy
+from models.models import Employer, Vacancy
 from utils.salary import convert_salary_to_int
 from utils.vacancies import calculate_promotion
 

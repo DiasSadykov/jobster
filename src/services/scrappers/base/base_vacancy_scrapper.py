@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import random
 import httpx
 from db.vacancy_table import VacancyTable
-from services.models import Vacancy
+from models.models import Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 class VacancyScrapperBase:

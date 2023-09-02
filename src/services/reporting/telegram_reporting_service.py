@@ -2,7 +2,7 @@ import os
 import telegram
 from db.vacancy_table import VacancyTable
 
-from services.models import Vacancy
+from models.models import Vacancy
 from utils.salary import convert_salary_to_int
 from utils.vacancies import group_vacancies_by_company
 

@@ -1,4 +1,4 @@
-from services.models import User
+from models.models import User
 from db.utils import conn
 
 FIELDS = "id, email, password, balance, created_at"

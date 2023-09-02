@@ -5,7 +5,7 @@ from fastapi.responses import RedirectResponse
 from db.user_table import UserTable
 from db.vacancy_table import VacancyTable
 
-from services.models import User, Vacancy
+from models.models import User, Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")

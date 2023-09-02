@@ -1,4 +1,4 @@
-from services.models import Vacancy
+from models.models import Vacancy
 from db.utils import conn
 FIELDS = "title, description, created_by, url, salary, company, city, source, is_new, created_at, id, tags"
 

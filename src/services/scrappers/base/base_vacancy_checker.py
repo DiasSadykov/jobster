@@ -1,7 +1,7 @@
 import asyncio
 import httpx
 from db.vacancy_table import VacancyTable
-from services.models import Vacancy
+from models.models import Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 SCRAP_INTERVAL = 60 * 60
