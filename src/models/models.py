@@ -1,4 +1,3 @@
-import uuid
 from dataclasses import dataclass
 
 @dataclass
@@ -68,13 +67,6 @@ def extract_tag_by_keywords(vacancy: Vacancy, keywords: list[str], tag: str):
     if check_words_in_title(vacancy.title, keywords):
         return [tag]
     return []
-
-@dataclass
-class Employer:
-    db_name: str
-    shown_name: str
-    logo: str
-
 
 @dataclass
 class User:

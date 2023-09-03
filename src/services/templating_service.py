@@ -1,15 +1,22 @@
 from collections import defaultdict
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 import os
 from fastapi.templating import Jinja2Templates
 from db.vacancy_table import VacancyTable
-from models.models import Employer, Vacancy
+from models.models import Vacancy
 from utils.salary import convert_salary_to_int
 from utils.vacancies import calculate_promotion
 
 TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
 
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
+
+@dataclass
+class Employer:
+    db_name: str
+    shown_name: str
+    logo: str
 
 TOP_EMPLOYERS = {
     "Kaspi.kz": Employer("Kaspi.kz", "Kaspi", "https://upload.wikimedia.org/wikipedia/ru/a/aa/Logo_of_Kaspi_bank.png"),
