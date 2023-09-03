@@ -1,5 +1,5 @@
 <html data-theme="light">
-    {% include "static/headers.html" without context %}
+    {% include "static/headers.html" %}
 <body>
     {% include "static/navbar.html" without context %}
     <div class="mx-5 xl:mx-20 mt-12">
@@ -12,7 +12,7 @@
             </p>
         </div>
     </div>
-    <div class="mx-12 mb-14 flex flex-col">
+    <div class="mx-12 mb-96 flex flex-col">
         <ul role="list" class="divide-y divide-gray-100">
             {% for company in companies %}
                 <a href="/company/{{company.id}}">

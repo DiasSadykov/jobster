@@ -12,14 +12,14 @@ templates = Jinja2Templates(directory=TEMPLATES_DIR)
 class CompanyService:
     def return_all_companies(self, request: Request, session: Session):
         companies = session.query(Company).where(Company.reviwed_at != None).all()
-        return templates.TemplateResponse("companies/all_companies.html", {"request": request, "companies": companies})
+        return templates.TemplateResponse("companies/all_companies.html", {"request": request, "companies": companies, "page_title": "Все IT компании Казахстана"})
 
     def render_add_new_company_form(self, request: Request):
-        return templates.TemplateResponse("companies/add_new_company_form.html", {"request": request})
+        return templates.TemplateResponse("companies/add_new_company_form.html", {"request": request, "page_title": "TechHunter - Добавить компанию"})
 
     def get_company(self, request: Request, id: int, session: Session):
         company = session.query(Company).where(Company.id == id).first()
-        return templates.TemplateResponse("companies/company.html", {"request": request, "company": company})
+        return templates.TemplateResponse("companies/company.html", {"request": request, "company": company, "page_title": "Профиль IT компании " + company.name})
 
     async def add_new_company(self, request: Request,
         name: str,

@@ -1,9 +1,12 @@
 <html data-theme="light">
-    {% include "static/headers.html" without context %}
+    {% include "static/headers.html" %}
 <body>
     {% include "static/navbar.html" without context %}
     <div class="mx-5 xl:mx-20 mt-12">
-        <div  class="flex flex-col items-center justify-center shadow-md rounded-md">
+        <div class="mx-2">
+            <a href="/companies" class="btn  normal-case text-xl mb-6">Назад</a>
+        </div>
+        <div  class="flex flex-col items-center justify-center shadow-md border pt-12 rounded-md">
             <img class="h-24 w-24 flex-none rounded-xl bg-gray-50" src="{{company.logo_url}}" alt="">
         
             <h1 id="top-vacancies" class="text-5xl lg:text-4xl font-bold tracking-tight text-slate-900 ">
@@ -19,7 +22,7 @@
             <div class="badge badge-accent badge-outline capitalize text-xl lg:text-sm p-4 lg:p-2 mt-1 mb-2">{{company.tech_stack}}</div>
             <p class="text-3xl lg:text-base  mt-2 mb-7"><span style="white-space: pre-line">{{company.description}}</span></p>
         </div>
-        <a href="{{company.website_url}}" class="btn btn-wide m-auto mb-7 btn-outline btn-success">Перейти на сайт компании</a>
+        <a href="{{company.website_url}}" class="btn btn-wide m-auto mb-12 btn-outline btn-success">Перейти на сайт компании</a>
 
         </div>
     </div>
