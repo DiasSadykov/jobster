@@ -1,0 +1,101 @@
+<html data-theme="light">
+    {% include "static/headers.html" without context %}
+<body>
+    {% include "static/navbar.html" without context %}
+    <div class="mx-5 xl:mx-20 mt-12">
+        <div  class="flex flex-col items-center justify-center ">
+            <h1 id="top-vacancies" class="text-5xl lg:text-4xl font-bold tracking-tight text-slate-900 ">
+                Добавить компанию 💼
+            </h1>
+            <p class="text-2xl lg:text-xl font-light mt-2 mb-7 text-center">
+                Заполните форму для добавления профиля компании на сайт. Мы проверим информацию и добавим компанию в нашу базу данных в течение 24 часов.
+            </p>
+            <form action="/company/add" method="post" class="m-2 space-y-4 w-full p-12">
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Название компании</span>
+                        </label>
+                        <input required name="name" type="text" placeholder="Google" class="input input-bordered input-md w-full max-w-xl" />
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Описание компании</span>
+                        </label>
+                        <textarea required name="description" class="textarea textarea-bordered h-72" placeholder="Компания основана в 1998 году и занимается рекламой в интернете..."></textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Количество сотрудников</span>
+                        </label>
+                        <input name="headcount" type="text" placeholder="10-100" class="input input-bordered input-md w-full max-w-xl" />
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Тип компании</span>
+                        </label>
+                        <select name="type" class="select select-bordered w-full max-w-xs">
+                            <option>product</option>
+                            <option>outsource</option>
+                            <option>outstaff</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Индустрия</span>
+                        </label>
+                        <input name="industry" class="input input-bordered input-md w-full max-w-xl" placeholder="fintech/edtech/ridehailing"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Технологический стек</span>
+                        </label>
+                        <input name="tech_stack" class="input input-bordered input-md w-full max-w-xl" placeholder="Python, CassandraDB, K8S"></textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Лого</span>
+                        </label>
+                        <input name="logo_url" type="text" placeholder="https://..." class="input input-bordered input-md w-full max-w-xl" />
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control">
+                        <label class="label">
+                          <span class="label-text">Сайт компании</span>
+                        </label>
+                        <input name="website_url" type="text" placeholder="https://..." class="input input-bordered input-md w-full max-w-xl" />
+                    </div>
+                </div>
+                <br/>
+                {% if error %}
+                <div class="alert alert-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>{{error}}</span>
+                </div>
+                {% endif %}
+                <div>
+                    <button class="btn btn-block btn-info btn-wide">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="mx-12 mb-14 flex flex-col">
+
+    </div>
+    {% include "static/footer.html" %}
+    {% include "static/cookie.html" without context %}
+</body>
+</html>
