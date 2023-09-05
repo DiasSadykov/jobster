@@ -9,18 +9,18 @@
         <div  class="flex flex-col items-center justify-center shadow-md border pt-12 rounded-md">
             <img class="h-24 w-24 flex-none rounded-xl bg-gray-50" src="{{company.logo_url}}" alt="">
         
-            <h1 id="top-vacancies" class="text-5xl lg:text-4xl font-bold tracking-tight text-slate-900 ">
+            <h1 id="top-vacancies" class="text-4xl font-bold tracking-tight text-slate-900 ">
                 {{company.name}}
             </h1>
         <div class="w-full px-12">
-            <p class="mt-1 text-lg lg:text-xs leading-5 text-gray-500">Тип Компании</time></p>
-            <div class="badge badge-accent badge-outline capitalize text-xl lg:text-sm p-4 lg:p-2 mt-1 mb-2">{{company.type}}</div>
-            <p class="mt-1 text-lg lg:text-xs leading-5 text-gray-500">Индустрия</time></p>
-            <div class="badge badge-accent badge-outline capitalize text-xl lg:text-sm p-4 lg:p-2 mt-1 mb-2">{{company.industry}}</div>
+            <p class="mt-1 text-xs leading-5 text-gray-500">Тип Компании</time></p>
+            <div class="badge badge-accent badge-outline capitalize :text-sm mt-1 mb-2">{{company.type}}</div>
+            <p class="mt-1 text-xs leading-5 text-gray-500">Индустрия</time></p>
+            <div class="badge badge-accent badge-outline capitalize :text-sm mt-1 mb-2">{{company.industry}}</div>
             <br/>
-            <p class="mt-1 text-lg lg:text-xs leading-5 text-gray-500">Технологический стек</time></p>
-            <div class="badge badge-accent badge-outline capitalize text-xl lg:text-sm p-4 lg:p-2 mt-1 mb-2">{{company.tech_stack}}</div>
-            <p class="text-3xl lg:text-base  mt-2 mb-7"><span style="white-space: pre-line">{{company.description}}</span></p>
+            <p class="mt-1 text-xs leading-5 text-gray-500">Технологический стек</time></p>
+            <div class="badge badge-accent badge-outline capitalize text-sm  mt-1 mb-2">{{company.tech_stack}}</div>
+            <p class="text-base  mt-2 mb-7"><span style="white-space: pre-line">{{company.description}}</span></p>
         </div>
         <a href="{{company.website_url}}" class="btn btn-wide m-auto mb-12 btn-outline btn-success">Перейти на сайт компании</a>
 

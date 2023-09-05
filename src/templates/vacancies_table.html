@@ -1,48 +1,49 @@
 
-{% set filter_class = 'text-2xl p-5 lg:text-sm lg:p-2 font-semibold badge badge-lg badge-primary badge-outline m-1' %}
+{% set filter_class = 'font-semibold badge badge-md lg:badge-lg badge-primary badge-outline m-1' %}
 <div class="alert mb-8">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
     <span>Знаешь того кому может быть интересна вакансия на нашем сайте? Поделись ссылкой на сайт c другом 🔗</span>
 </div>
-<div class="flex flex-row mx-6 justify-center mb-6">
-    <button class="filter-button-{{id}} {{filter_class}}" data-filter="new">🆕&nbsp;&nbsp;New (Последние 24 часа)</button>
+<div class="flex flex-row mx-6 justify-center mb-3">
+    <button class="filter-button-{{id}} {{filter_class}}" data-filter="new">🆕&nbsp;&nbsp;New</button>
+    <button class="filter-button-{{id}} {{filter_class}}" data-filter="remote">🌎&nbsp;&nbsp;Remote</button>
+
 </div>
-<div class="flex flex-row justify-center">
-    <div class="flex flex-col mx-4">
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="remote">🌎&nbsp;&nbsp;Remote</button>
+<div class="flex flex-col md:flex-row justify-center">
+    <div class="flex flex-row md:flex-col mx-4">
     </div>
-    <div class="flex flex-col ml-8 lg:ml-16">
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="intern">Intern</button>
+    <div class="flex flex-row md:flex-col justify-center">
+        <button class="filter-button-{{id}} {{filter_class}} hidden md:block" data-filter="intern">Intern</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="junior">Junior</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="middle">Middle</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="senior">Senior</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="lead">Lead</button>
     </div>
-    <div class="flex flex-col ml-8 lg:ml-16">
+    <div class="flex flex-row md:flex-col lg:ml-16 mt-3 lg:mt-0 justify-center">
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="frontend">Frontend</button>
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="backend">Backend</button>
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="fullstack">Fullstack</button>
+        <button class="filter-button-{{id}} {{filter_class}} hidden md:block" data-filter="backend">Backend</button>
+        <button class="filter-button-{{id}} {{filter_class}} hidden md:block" data-filter="fullstack">Fullstack</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="qa">QA</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="ios">iOS</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="android">Android</button>
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-row md:flex-col justify-center">
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="product">Product</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="data">Data</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="design">Design</button>
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="analyst">Analyst</button>
+        <button class="filter-button-{{id}} {{filter_class}} hidden md:block" data-filter="analyst">Analyst</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="sysadmin">SysAdmin</button>
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="devops">DevOps</button>
+        <button class="filter-button-{{id}} {{filter_class}} hidden md:block" data-filter="devops">DevOps</button>
     </div>
-    <div class="flex flex-col ml-8 lg:ml-16">
+    <div class="flex flex-row md:flex-col lg:ml-16 mt-3 lg:mt-0 justify-center">
         <button class="filter-button-{{id}} {{filter_class}}" data-filter=".net">.Net</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="golang">Go</button>
-        <button class="filter-button-{{id}} {{filter_class}}" data-filter="python">Python</button>
+        <button class="filter-button-{{id}} {{filter_class}} hidden md:block" data-filter="python">Python</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="java_">Java</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="c++">C++</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="c#">C#</button>
     </div>
-    <div class="flex flex-col">
+    <div class="flex flex-row md:flex-col justify-center">
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="php">php</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="javascript">JS</button>
         <button class="filter-button-{{id}} {{filter_class}}" data-filter="react">React</button>
@@ -140,12 +141,12 @@
         ],
         initComplete: function(settings, json) {
           $('.dataTables_filter').removeClass('dataTables_filter').addClass('font-semibold rounded-md');
-          $('input[aria-controls="{{id}}"]').addClass('input input-bordered w-[42rem] shadow text-5xl py-10 lg:text-2xl lg:p-6 mx-auto font-semibold text-slate-600 ml-3').attr('id', 'tableSearch{{id}}');
+          $('input[aria-controls="{{id}}"]').addClass('input input-bordered lg:w-[42rem] shadow text-base p-6 font-semibold text-slate-600 mx-3').attr('id', 'tableSearch{{id}}');
           $('.dataTables_paginate').addClass('p-6 font-bold');
           $('.dataTables_length').remove();
           $('.dataTables_info').addClass('p-6 font-bold');
           $('#{{id}}_filter').addClass('flex justify-center');
-          $('#{{id}}_filter label').addClass('mb-12 flex items-center text-6xl lg:text-4xl mt-8 font-extrabold').contents().filter(function(){ return this.nodeType != 1; }).remove();
+          $('#{{id}}_filter label').addClass('mb-12 flex items-center text-4xl mt-8 font-extrabold').contents().filter(function(){ return this.nodeType != 1; }).remove();
           $('#{{id}}_filter label').prepend('🔎')
 
         for (var filter in activeFilters{{id}}) {
@@ -164,7 +165,7 @@
             table.columns(3).search("(?=.*{{city_title}})", true, false, true).draw();
         {% endif %}
         },
-        {% set column_class = 'h-32 lg:h-20 border-gray-200 text-2xl lg:text-xl' %}
+        {% set column_class = 'h-20 border-gray-200 text-xs lg:text-lg' %}
         columnDefs: [
               {
                   targets: 0,
@@ -178,19 +179,11 @@
                   className: '{{column_class}}' + ' rounded-l-xl'
               },
               {
-                  targets: [],
-                  render:  function ( data, type, row ) {
-                      return `<p class="text-gray-900 whitespace-no-wrap">`+data+`</p>`
-                      
-                  },
-                  className: '{{column_class}}'
-              },
-              {
                   targets: [1,2],
                   render:  function ( data, type, row ) {
                       return `<div class="flex">
-                            <div class="ml-3">
-                            <p class="text-gray-900 font-medium text-xl lg:text-base whitespace-no-wrap">`
+                            <div class="">
+                            <p class="text-gray-900 font-medium whitespace-no-wrap">`
                                 + data +
                             `</p>
                             </div>
@@ -202,7 +195,7 @@
                   targets: [3],
                   render:  function ( data, type, row ) {
                       return `<span
-                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight text-xl lg:text-base"
+                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
                         >
                             <span
                             aria-hidden
