@@ -165,13 +165,13 @@
             table.columns(3).search("(?=.*{{city_title}})", true, false, true).draw();
         {% endif %}
         },
-        {% set column_class = 'h-20 border-gray-200 text-xs lg:text-lg' %}
+        {% set column_class = 'h-20 border-gray-200 text-xs lg:text-lg !pr-0 m-0' %}
         columnDefs: [
               {
                   targets: 0,
                   render:  function ( data, type, row ) {
                       return `<a href=`+row[5]+` target='_blank'>
-                              <div class="flex">
+                              <div class="flex w-20 md:w-full m-0">
                                 <p class="my-auto max-h-full overflow-hidden text-gray-900 font-bold">`
                                   + data + `</p>
                         </div></a>`;
@@ -179,10 +179,23 @@
                   className: '{{column_class}}' + ' rounded-l-xl'
               },
               {
-                  targets: [1,2],
+                  targets: [1],
                   render:  function ( data, type, row ) {
                       return `<div class="flex">
-                            <div class="">
+                            <div class="w-20 md:w-full">
+                            <p class="text-gray-900 font-medium whitespace-no-wrap truncate">`
+                                + data +
+                            `</p>
+                            </div>
+                        </div>`;
+                  },
+                  className: '{{column_class}}'
+              },
+              {
+                  targets: [2],
+                  render:  function ( data, type, row ) {
+                      return `<div class="flex">
+                            <div class="w-15 md:w-full">
                             <p class="text-gray-900 font-medium whitespace-no-wrap">`
                                 + data +
                             `</p>
@@ -195,7 +208,7 @@
                   targets: [3],
                   render:  function ( data, type, row ) {
                       return `<span
-                            class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
+                            class="relative inline-block px-1 lg:px-3 text-xs lg:text-base py-1 font-semibold text-green-900 leading-tight"
                         >
                             <span
                             aria-hidden
