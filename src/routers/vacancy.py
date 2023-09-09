@@ -15,8 +15,8 @@ async def index(request: Request, session=Depends(get_session)):
     return templating_service.render_root_page(request, session)
 
 @router.get("/jobs/{description}", response_class=HTMLResponse)
-async def post_vacancy(request: Request, description: str):
-    return templating_service.render_jobs_page(request, description)
+async def post_vacancy(request: Request, description: str, session=Depends(get_session)):
+    return templating_service.render_jobs_page(request, description, session)
 
 @router.get("/vacancy/{id}", response_class=HTMLResponse)
 async def get_vacancy(request: Request, id: int, session=Depends(get_session)):

@@ -101,8 +101,8 @@ class TemplatingService:
         return [city_title, job_title, job_tag]
 
 
-    def render_jobs_page(self, request, description: str):
-        all_vacancies = self.get_all_vacancies_sorted()
+    def render_jobs_page(self, request, description: str, session: Session):
+        all_vacancies = self.get_all_vacancies_sorted(session=session)
         all_vacancies = self.format_vacancies(all_vacancies)
         [city_title, job_title, job_tag] = self.translate_description_into_city_and_job_title(description)
         return templates.TemplateResponse("jobs_with_description.html", {"request": request, 
