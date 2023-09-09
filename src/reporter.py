@@ -1,7 +1,7 @@
 import asyncio
-import datetime
 import time
 import schedule
+import sentry_sdk
 from sqlmodel import Session
 from db.utils import engine
 from models.sqlmodels import Vacancy
@@ -9,6 +9,12 @@ from services.reporting.telegram_reporting_service import TelegramReportingServi
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
+
+sentry_sdk.init(
+    dsn="https://fad90a96deef9d5a0e009d3d1075414f@o4505853118054400.ingest.sentry.io/4505853119299584",
+    traces_sample_rate=1.0,
+    profiles_sample_rate=1.0,
+)
 
 def run_reporting_cron():
     try:
