@@ -1,8 +1,8 @@
 import os
+from sqlmodel import Session
 import telegram
-from db.vacancy_table import VacancyTable
 
-from models.models import Vacancy
+from models.sqlmodels import Vacancy
 from utils.salary import convert_salary_to_int
 from utils.vacancies import group_vacancies_by_company
 
@@ -34,11 +34,14 @@ class TelegramReportingService:
         return f"<a href='{vacancy.url}'>{vacancy.title} {salary}</a>"
 
     @staticmethod
-    async def report_added_vacancies_by_company_sorted():
-        vacancies = VacancyTable.get_new_vacancies()
+    async def report_added_vacancies_by_company_sorted(session: Session, private=False):
+        vacancies = session.query(Vacancy).filter(Vacancy.is_new == True).all()
         if len(vacancies) == 0:
             message = "Сегодня новых вакансий нет, но посмотреть все вакансии можно на сайте: https://techhunter.kz/"
-            await TelegramReportingService.send_message_to_public_channel(message, thread_id=141)
+            if private:
+                await TelegramReportingService.send_message_to_private_channel(message)
+            else:
+                await TelegramReportingService.send_message_to_public_channel(message, thread_id=141)
             return
         message = f"<b>Новые вакансии: {len(vacancies)} 🚀</b>\n\n"
         vacancies.sort(key=lambda vacancy: convert_salary_to_int(vacancy.salary), reverse=True)
@@ -55,7 +58,11 @@ class TelegramReportingService:
         message += "\n"
         message += "Посмотреть остальные вакансии можно на сайте:\n https://techhunter.kz/"
 
-        await TelegramReportingService.send_message_to_public_channel(message, thread_id=141)
+        if private:
+            await TelegramReportingService.send_message_to_private_channel(message)
+        else:
+            # await TelegramReportingService.send_message_to_public_channel(message, thread_id=141)
+            pass
 
     @staticmethod
     async def report_deleted_vacancies(vacancies: list[Vacancy]):

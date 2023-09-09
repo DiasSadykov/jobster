@@ -5,7 +5,9 @@ from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from fastapi_login import LoginManager
-from db.user_table import UserTable
+from sqlmodel import Session
+from db.utils import engine
+from models.sqlmodels import User
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 SECRET = "super-secret-key"
@@ -17,7 +19,9 @@ templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 @manager.user_loader()
 def query_user(email: str):
-    return UserTable.get_user_by_email(email)
+    with Session(engine) as session:
+        user = session.query(User).filter(User.email == email).first()
+        return user
 
 class LoginService:
     def render_signup_page(self, request, user):
@@ -31,7 +35,7 @@ class LoginService:
         return templates.TemplateResponse("login/login.html", {"request": request})
 
 
-    async def handle_signup(self, request: Request):
+    async def handle_signup(self, request: Request, session: Session):
         request_data = await request.form()
         email = request_data.get("email")
         password = request_data.get("password")
@@ -40,7 +44,9 @@ class LoginService:
         # hash password
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         try:
-            id = UserTable.insert_user(email, hashed_password)
+            user = User(email=email, password=hashed_password)
+            session.add(user)
+            session.commit()
         except Exception as e:
             return templates.TemplateResponse("signup/signup.html", {"request": request, "error": "Пользователь с таким email уже существует"})
         access_token = manager.create_access_token(
@@ -51,14 +57,14 @@ class LoginService:
         response.set_cookie("access_token", access_token)
         return response
 
-    async def handle_login(self, request: Request):
+    async def handle_login(self, request: Request, session: Session):
         request_data = await request.form()
         email = request_data.get("email")
         password = str(request_data.get("password"))
         if not email or not password:
             return templates.TemplateResponse("signup/signup.html", {"request": request, "error": "Email and password are required"})
 
-        user = UserTable.get_user_by_email(email)
+        user = session.query(User).filter(User.email == email).first()
 
         if not user or not bcrypt.checkpw(password.encode('utf-8'), user.password): 
             return templates.TemplateResponse("login/login.html", {"request": request, "error": "Неверный логин или пароль"})

@@ -22,15 +22,16 @@ class CompanyService:
         return templates.TemplateResponse("companies/company.html", {"request": request, "company": company, "page_title": "Профиль IT компании " + company.name})
 
     async def add_new_company(self, request: Request,
-        name: str,
-        description: str,
-        headcount: str,
-        type: str,
-        industry: str,
-        tech_stack: str,
-        logo_url: str,
-        website_url: str,
-        session: Session):
+            name: str,
+            description: str,
+            headcount: str,
+            type: str,
+            industry: str,
+            tech_stack: str,
+            logo_url: str,
+            website_url: str,
+            session: Session
+        ):
         company = Company(
             name=name,
             description=description,

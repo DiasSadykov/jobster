@@ -1,5 +1,5 @@
 from collections import defaultdict
-from models.models import Vacancy
+from models.sqlmodels import Vacancy
 
 
 def group_vacancies_by_company(vacancies: list[Vacancy]):

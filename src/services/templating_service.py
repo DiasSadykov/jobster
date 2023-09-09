@@ -1,10 +1,11 @@
+import os
+
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-import os
 from fastapi.templating import Jinja2Templates
-from db.vacancy_table import VacancyTable
-from models.models import Vacancy
+from sqlmodel import Session
+from models.sqlmodels import Vacancy
 from utils.salary import convert_salary_to_int
 from utils.vacancies import calculate_promotion
 
@@ -55,8 +56,8 @@ city_tag_to_localized_city_title = {
 
 
 class TemplatingService:
-    def get_all_vacancies_sorted(self):
-        all_vacancies = VacancyTable.get_all_vacancies()
+    def get_all_vacancies_sorted(self, session: Session):
+        all_vacancies = session.query(Vacancy).all()
         all_vacancies.sort(key=lambda vacancy: (calculate_promotion(vacancy)+convert_salary_to_int(vacancy.salary)), reverse=True)
         return all_vacancies
 
@@ -67,19 +68,11 @@ class TemplatingService:
                 top_vacancies[vacancy.company].append(vacancy)
         return top_vacancies
 
-    def get_new_vacancies(self, all_vacancies: list[Vacancy]):
-        new_vacancies = []
-        today = datetime.now()
-        for vacancy in all_vacancies:
-            if datetime.fromisoformat(vacancy.created_at) > today - timedelta(days=1):
-                new_vacancies.append(vacancy)
-        return new_vacancies
-
     def format_vacancies(self, vacancies: list[Vacancy]):
         for vacancy in vacancies:
             if vacancy.source == "techhunter.kz":
                 vacancy.title = "🔥 " + vacancy.title
-            if datetime.fromisoformat(vacancy.created_at) > datetime.now() - timedelta(days=1):
+            if vacancy.created_at > datetime.now() - timedelta(days=1):
                 vacancy.title = "🆕 " + vacancy.title
                 if vacancy.tags:
                     vacancy.tags += ",new"
@@ -88,8 +81,8 @@ class TemplatingService:
         return vacancies
         
 
-    def render_root_page(self, request):
-        all_vacancies = self.get_all_vacancies_sorted()
+    def render_root_page(self, request, session: Session):
+        all_vacancies = self.get_all_vacancies_sorted(session)
         all_vacancies = self.format_vacancies(all_vacancies)
         top_vacancies_by_company = self.get_top_vacancies_by_company(all_vacancies)
         return templates.TemplateResponse("index.html", {"request": request, 
@@ -115,6 +108,6 @@ class TemplatingService:
         return templates.TemplateResponse("jobs_with_description.html", {"request": request, 
                                                          "all_vacancies": all_vacancies, "page_title": f"Вакансии {job_title} в {city_title}", "city_title": city_title, "job_title": job_title, "job_tag": job_tag})
 
-    def render_vacancy(self, request, id: int):
-        vacancy = VacancyTable.get_by_id(id)
+    def render_vacancy(self, request, id: int, session: Session):
+        vacancy = session.query(Vacancy).filter(Vacancy.id == id).first()
         return templates.TemplateResponse("vacancy.html", {"request":request, "vacancy": vacancy})

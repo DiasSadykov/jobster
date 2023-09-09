@@ -1,7 +1,8 @@
 import asyncio
 import httpx
-from db.vacancy_table import VacancyTable
-from models.models import Vacancy
+from sqlmodel import Session
+from models.sqlmodels import Vacancy
+from db.utils import engine
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 SCRAP_INTERVAL = 60 * 60
@@ -15,12 +16,16 @@ class VacancyCheckerBase:
         while True:
             await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Checking {self.source}")
             try:
-                all_vacancies = VacancyTable.get_by_source(self.source)
-                for vacancy in all_vacancies:
-                    if await self.check_closed(vacancy):
-                        VacancyTable.delete_vacancy(vacancy.url)
-                        await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Vacancy {vacancy.title} is closed")
-                    await asyncio.sleep(1)
+                deleted_count = 0
+                with Session(engine) as session:
+                    all_vacancies = session.query(Vacancy).where(Vacancy.source == self.source).all()
+                    for vacancy in all_vacancies:
+                        if await self.check_closed(vacancy):
+                            deleted_count += 1
+                            session.delete(vacancy)
+                        await asyncio.sleep(1)
+                    session.commit()
+                await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Deleted {deleted_count} vacancies")
             except Exception as e:
                 await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: Error: {e}")
             await TelegramReportingService.send_message_to_private_channel(f"[{self.source} checker]: {self.source} check finished")

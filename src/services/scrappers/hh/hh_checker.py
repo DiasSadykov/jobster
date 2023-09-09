@@ -1,4 +1,4 @@
-from models.models import Vacancy
+from models.sqlmodels import Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 from services.scrappers.base.base_vacancy_checker import VacancyCheckerBase
 from bs4 import BeautifulSoup

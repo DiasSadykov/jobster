@@ -4,7 +4,7 @@ from urllib.parse import urljoin, urlparse
 
 from services.reporting.telegram_reporting_service import TelegramReportingService
 from services.scrappers.base.base_vacancy_scrapper import VacancyScrapperBase
-from models.models import Vacancy
+from models.sqlmodels import Vacancy
 
 MAX_PAGE = 100
 

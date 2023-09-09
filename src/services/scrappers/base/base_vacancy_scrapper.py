@@ -2,8 +2,9 @@ import asyncio
 from datetime import datetime, timedelta
 import random
 import httpx
-from db.vacancy_table import VacancyTable
-from models.models import Vacancy
+from sqlmodel import Session
+from db.utils import engine
+from models.sqlmodels import Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 class VacancyScrapperBase:
@@ -19,30 +20,25 @@ class VacancyScrapperBase:
         while next_run_time < datetime.now():
             next_run_time = next_run_time + timedelta(hours=self.interval_hours)
         self.next_run_time = next_run_time
-        print(datetime.now(), self.next_run_time)
 
     async def scrap(self) -> list[Vacancy]:
-        # take all vacancies from db in a set and then compare with new vacancies
-        response = await self.client.get(self.url_base)
-        vacancies = self.findData(response)
-        return vacancies
-
-    def save_in_db(self, vacancies):
-        for vacancy in vacancies:
-            VacancyTable.insert_vacancy(vacancy)
+        raise NotImplementedError("Method findData is not implemented")
 
     async def _run(self):
         try:
-            await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Started Scrapping")
-            old_vacancies = VacancyTable.get_by_source(self.source)
-            old_vacancies_urls = set(vacancy.url for vacancy in old_vacancies)
-            new_vacancies = await self.scrap()
-            new_vacancies_dict = {vacancy.url: vacancy for vacancy in new_vacancies}
-            new_vacancies_urls = set(vacancy.url for vacancy in new_vacancies)
-            added_vacancies_urls = new_vacancies_urls - old_vacancies_urls
-            added_vacancies = [new_vacancies_dict[url] for url in added_vacancies_urls]
-            self.save_in_db(new_vacancies)
-            await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Saved {len(added_vacancies)} in db")
+            with Session(engine) as session:
+                await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Started Scrapping")
+                old_vacancies = session.query(Vacancy).where(Vacancy.source == self.source).all()
+                old_vacancies_urls = set(vacancy.url for vacancy in old_vacancies)
+                new_vacancies = await self.scrap()
+                new_vacancies_dict = {vacancy.url: vacancy for vacancy in new_vacancies}
+                new_vacancies_urls = set(vacancy.url for vacancy in new_vacancies)
+                added_vacancies_urls = new_vacancies_urls - old_vacancies_urls
+                added_vacancies = [new_vacancies_dict[url] for url in added_vacancies_urls]
+                for vacancy in added_vacancies:
+                    session.add(vacancy)
+                session.commit()
+                await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] Saved {len(added_vacancies)} in db")
         except Exception as e:
             await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}]: Error: {e}")
 
@@ -56,6 +52,3 @@ class VacancyScrapperBase:
 
     async def run_now(self):
         await self._run()
-
-    async def findData(self):
-        raise NotImplementedError("Method findData is not implemented")

@@ -1,8 +1,11 @@
 import asyncio
 import os
 import click
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel, Session, create_engine
+from models.sqlmodels import Vacancy
+from services.reporting.telegram_reporting_service import TelegramReportingService
 from services.scrappers.vacancy_scrappers import ALL_SCRAPPERS
+from db.utils import engine
 
 DATABASE_LOCATION = os.environ.get("DATABASE_LOCATION") or "db.sqlite3"
 sqlite_url = f"sqlite:///{DATABASE_LOCATION}"
@@ -28,9 +31,19 @@ def create_tables_sqlmodel():
     engine = create_engine(sqlite_url, echo=True)
     SQLModel.metadata.create_all(engine)
 
+@click.command()
+def send_announcement():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    with Session(engine) as session:
+        loop.run_until_complete(TelegramReportingService.report_added_vacancies_by_company_sorted(session, private=True))
+        session.query(Vacancy).update({Vacancy.is_new: False})
+        session.commit()
+
 cli.add_command(scrap_now)
 cli.add_command(create_tables_legacy)
 cli.add_command(create_tables_sqlmodel)
+cli.add_command(send_announcement)
 
 if __name__ == '__main__':
     cli()

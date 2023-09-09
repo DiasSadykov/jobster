@@ -2,10 +2,9 @@ import os
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
-from db.user_table import UserTable
-from db.vacancy_table import VacancyTable
+from sqlmodel import Session
 
-from models.models import User, Vacancy
+from models.sqlmodels import User, Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
@@ -17,7 +16,7 @@ class RecruiterService:
             return templates.TemplateResponse("login/login.html", {"request": request})
         return templates.TemplateResponse("dashboard/dashboard.html", {"request": request, "user": user, "page_title": "TechHunter - Кабинет Рекрутера"})
 
-    async def post_vacancy(self, request: Request, user: User):
+    async def post_vacancy(self, request: Request, user: User, session: Session):
         if not user:
             return templates.TemplateResponse("login/login.html", {"request": request})
         if user.balance < 10000:
@@ -31,10 +30,10 @@ class RecruiterService:
         tags = request_data.get("tags")
         source = "techhunter.kz"
         vacancy = Vacancy(title=title, description=description, salary=salary, company=company, city=city, tags=tags, created_by=user.id, source=source)
-        id = VacancyTable.insert_vacancy(vacancy)
-        url = f"/vacancy/{id}"
-        VacancyTable.update_url(id, url)
+        session.add(vacancy)
+        session.commit()
+        vacancy.url = f"/vacancy/{vacancy.id}"
         user.balance -= 10000
-        UserTable.update_user(user)
+        session.commit()
         await TelegramReportingService.send_message_to_private_channel(f"New vacancy posted: {title}")
-        return RedirectResponse(f'/vacancy/{id}', status_code=303)
+        return RedirectResponse(f'/vacancy/{vacancy.id}', status_code=303)
