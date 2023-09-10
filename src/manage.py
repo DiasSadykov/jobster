@@ -35,7 +35,6 @@ def send_announcement():
         session.commit()
 
 cli.add_command(scrap_now)
-cli.add_command(create_tables_legacy)
 cli.add_command(create_tables_sqlmodel)
 cli.add_command(send_announcement)
 
