@@ -27,15 +27,15 @@ class Vacancy(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str = Field(sa_column=Column(TEXT, nullable=False))
     description: str = Field(sa_column=Column(TEXT))
-    created_by: int = None
     url: str = Field(sa_column=Column(TEXT))
     salary: str = Field(sa_column=Column(TEXT))
     company: str = Field(sa_column=Column(TEXT))
     city: str = Field(sa_column=Column(TEXT))
     source: str = Field(sa_column=Column(TEXT))
+    tags: str = Field(sa_column=Column(TEXT))
+    created_by: int = None
     created_at: datetime = Field(sa_column=Column(TIMESTAMP, nullable=False, server_default=func.now()), default_factory=datetime.utcnow)
     is_new: bool = False
-    tags: str = None
 
     def __init__(self, **kw):
         super().__init__(**kw)

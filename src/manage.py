@@ -21,14 +21,8 @@ def scrap_now():
         asyncio.run(scrapper.run_now())
 
 @click.command()
-def create_tables_legacy():
-    from db.utils import create_db_if_not_exists
-    create_db_if_not_exists()
-
-@click.command()
 def create_tables_sqlmodel():
-    from models.sqlmodels import Company
-    engine = create_engine(sqlite_url, echo=True)
+    from db.utils import engine
     SQLModel.metadata.create_all(engine)
 
 @click.command()
