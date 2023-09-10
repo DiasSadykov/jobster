@@ -9,7 +9,6 @@ services:
     container_name: python_web_service
     ports:
       - "8000:8000"  # Replace the second port with the one your Python web service listens on
-      - "5432:5432"
     volumes:
       - ./:/app  # Mount your Python web service code to the container
       - ~/data:/data  # Mount a volume to store the database
@@ -27,8 +26,6 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: scraper_job
-    ports:
-      - "5432:5432"
     volumes:
       - ./:/app  # Mount your scraper code to the container
       - ~/data:/data  # Mount a volume to store the database
@@ -45,8 +42,6 @@ services:
       dockerfile: Dockerfile
     restart: always
     container_name: reporter_job
-    ports:
-      - "5432:5432"
     volumes:
       - ./:/app  # Mount your scraper code to the container
       - ~/data:/data  # Mount a volume to store the database
