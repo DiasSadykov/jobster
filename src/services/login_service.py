@@ -5,7 +5,7 @@ from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from fastapi_login import LoginManager
-from sqlmodel import Session
+from sqlmodel import Session, select
 from db.utils import engine
 from models.sqlmodels import User
 from services.reporting.telegram_reporting_service import TelegramReportingService
@@ -64,9 +64,8 @@ class LoginService:
         if not email or not password:
             return templates.TemplateResponse("signup/signup.html", {"request": request, "error": "Email and password are required"})
 
-        user = session.query(User).filter(User.email == email).first()
-
-        if not user or not bcrypt.checkpw(password.encode('utf-8'), user.password): 
+        user = session.exec(select(User).where(User.email == email)).first()
+        if not user or not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf8')): 
             return templates.TemplateResponse("login/login.html", {"request": request, "error": "Неверный логин или пароль"})
         access_token = manager.create_access_token(
             data={'sub': email}
