@@ -20,7 +20,7 @@ class RecruiterService:
         if not user:
             return templates.TemplateResponse("login/login.html", {"request": request})
         if user.balance < 10000:
-            return templates.TemplateResponse("dashboard/dashboard.html", {"request": request, "balance": user.balance, "error": "Недостаточно средств, пожалуйста пополните баланс"})
+            return templates.TemplateResponse("dashboard/dashboard.html", {"request": request, "user": user, "balance": user.balance, "error": "Недостаточно средств, пожалуйста пополните баланс"})
         request_data = await request.form()
         title = request_data.get("title")
         description = request_data.get("description")
