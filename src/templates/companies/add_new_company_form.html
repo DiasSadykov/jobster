@@ -3,14 +3,14 @@
 <body>
     {% include "static/navbar.html" without context %}
     <div class="mx-5 xl:mx-20 mt-12">
-        <div  class="flex flex-col items-center justify-center ">
+        <div  class="flex flex-col items-center justify-center bg-white bg-opacity-100 rounded-xl p-4 lg:p-20">
             <h1 id="top-vacancies" class="text-5xl lg:text-4xl font-bold tracking-tight text-slate-900 ">
                 Добавить компанию 💼
             </h1>
             <p class="text-2xl lg:text-xl font-light mt-2 mb-7 text-center">
                 Заполните форму для добавления профиля компании на сайт. Мы проверим информацию и добавим компанию в нашу базу данных в течение 24 часов.
             </p>
-            <form action="/company/add" method="post" class="m-2 space-y-4 w-full p-12">
+            <form action="/company/add" method="post" class="m-2 space-y-4 w-full md:p-12 p-4">
                 <div>
                     <div class="form-control">
                         <label class="label">

@@ -1,7 +1,15 @@
-<div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+<div  class="flex flex-col items-center justify-center mx-4">
+    <h1 id="top-vacancies" class="text-4xl font-bold tracking-tight text-slate-900 text-center">
+        Популярные компании 🔥
+    </h1>
+    <p class="text-xl font-light mt-2 mb-2 lg:mb-12">
+        Выбор редакции TechHunter
+    </p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 mx-4">
     {% for employer in top_employers %}
-            <div class="grid-item ">
-                <div class="card bg-transparent">
+            <div class="grid-item">
+                <div class="card bg-transparent bg-white bg-opacity-100 md:mx-6 lg:mx-8 my-6 shadow">
                 <div class="card-body items-center text-center">
                     <div class="avatar">
                         <div class="mask mask-squircle w-24 h-24">
@@ -12,7 +20,7 @@
                         <div class="h text-2xl font-bold min-w-full">{{employer.shown_name}}</div>
                     </div>
                     <div class="">
-                        <ul role="list" class="mx-auto max-w-md border shadow-md  p-2 h-[500px] [&::-webkit-scrollbar]:hidden overflow-scroll">
+                        <ul role="list" class="mx-auto max-w-md p-2 h-[500px] [&::-webkit-scrollbar]:hidden overflow-scroll">
                             {% for vacancy in top_vacancies_by_company[employer.db_name] %}
                                 <a href="{{vacancy.url}}" target="_blank">
                                     <li class="hover:scale-110 transition border-b relative flex justify-between p-4 hover:bg-slate-100">

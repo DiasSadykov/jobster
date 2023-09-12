@@ -7,27 +7,29 @@
             <h1 id="top-vacancies" class="text-4xl font-bold tracking-tight text-slate-900 ">
                 Все компании 💼
             </h1>
-            <p class="text-xl font-light mt-2 mb-7 px-12 text-center">
+            <p class="text-xl font-light mt-2 mb-12 px-12 text-center">
                 Мы собираем информацию о всех IT компаниях в Казахстане, для того чтобы вы могли сравнить их и выбрать лучшую для себя
             </p>
         </div>
     </div>
     <div class="mx-4 lg:mx-12 mb-96 flex flex-col">
-        <ul role="list" class="divide-y divide-gray-100">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-12">
             {% for company in companies %}
-                <a href="/company/{{company.id}}">
-                    <li class="flex justify-between gap-x-6 py-5 shadow-md border rounded-xl p-2 my-2 hover:scale-105 transition">
-                        <div class="flex min-w-0 gap-x-4">
+                <a href="/company/{{company.id}}" class="rounded-3xl bg-white-true p-6 lg:p-12 flex flex-col justify-between bg-white bg-opacity-100">
+                        <div class="flex items-center space-x-4">
                             <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="{{company.logo_url}}" alt="">
                             <div class="min-w-0 flex-auto">
-                            <p class="font-semibold leading-6 text-gray-900 text-sm">{{company.name}}</p>
-                            <p class="mt-1 truncate text-xs leading-5 text-gray-500">{{company.description}}</p>
+                                <p class="font-bold text-20 ">{{company.name}}</p>
                             </div>
                         </div>
+                        <div class="h-6"></div>
+                        <div class="text-black-6 h-32"><p class="line-clamp-5">{{company.description}}</p></div>
+
                         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                             <div class="badge badge-accent badge-outline capitalize text-sm p-4 lg:p-2">{{company.type}}</div>
                             <p class="mt-1 text-lg lg:text-xs leading-5 text-gray-500">Тип Компании</time></p>
                         </div>
+                        <br/>
                         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                             <div class="badge badge-accent badge-outline capitalize banking text-sm p-4 lg:p-2">{{company.industry}}</div>
                             <p class="mt-1 text-lg lg:text-xs leading-5 text-gray-500">Индустрия</time></p>
@@ -39,11 +41,10 @@
                             <input disabled type="radio" name="rating-4" class="mask mask-star-2 bg-gray-100" />
                             <input disabled type="radio" name="rating-4" class="mask mask-star-2 bg-gray-100" />
                         </div>
-                    </li>
                 </a>
 
             {% endfor %}
-          </ul>
+            </div>
           <a href="/company/add" class="btn btn-wide m-auto mt-7 btn-outline success">Добавить компанию</a>
         </div>
     {% include "static/footer.html" %}

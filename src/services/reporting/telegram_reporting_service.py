@@ -61,8 +61,7 @@ class TelegramReportingService:
         if private:
             await TelegramReportingService.send_message_to_private_channel(message)
         else:
-            # await TelegramReportingService.send_message_to_public_channel(message, thread_id=141)
-            pass
+            await TelegramReportingService.send_message_to_public_channel(message, thread_id=141)
 
     @staticmethod
     async def report_deleted_vacancies(vacancies: list[Vacancy]):

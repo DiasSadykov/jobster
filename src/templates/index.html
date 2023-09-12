@@ -1,9 +1,13 @@
 <html data-theme="light">
     {% include "static/headers.html" without context %}
 <body>
-    {% include "static/navbar.html" without context %}
-    <div class="mx-4 xl:mx-20 mt-20 lg:mt-32">
-        {% include "static/hero.html" without context %}
+    <div class="rounded-b-xl">
+        {% include "static/navbar.html" without context %}
+        <div class="xl:mx-20 mt-20 lg:mt-32">
+            {% include "static/hero.html" without context %}
+        </div>
+    </div>
+    <div class="xl:mx-20">
         {% include "top_vacancies.html" %}
         {% include "all_vacancies.html" %}
     </div>
