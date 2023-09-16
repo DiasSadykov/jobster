@@ -1,3 +1,4 @@
+import os
 import sentry_sdk
 import uvicorn
 from fastapi import FastAPI
@@ -5,11 +6,14 @@ from routers import user, company, vacancy
 
 from fastapi.middleware.gzip import GZipMiddleware
 
-sentry_sdk.init(
-    dsn="https://fad90a96deef9d5a0e009d3d1075414f@o4505853118054400.ingest.sentry.io/4505853119299584",
-    traces_sample_rate=1.0,
-    profiles_sample_rate=1.0,
-)
+ENV = os.environ.get("ENV") or "DEV"
+
+if ENV == "PROD":
+    sentry_sdk.init(
+        dsn="https://fad90a96deef9d5a0e009d3d1075414f@o4505853118054400.ingest.sentry.io/4505853119299584",
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0
+    )
 
 app = FastAPI()
 app.add_middleware(GZipMiddleware, minimum_size=1000)

@@ -7,11 +7,16 @@ from utils.salary import convert_salary_to_int
 from utils.vacancies import group_vacancies_by_company
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
+ENV = os.environ.get("ENV")
 CHANNEL_ID = "-1001918708178"
 
 PRIVATE_CHANNEL_ID = "-1001836766800"
 
-bot = telegram.Bot(token=BOT_TOKEN)
+try:
+    bot = telegram.Bot(token=BOT_TOKEN)
+except telegram.error.InvalidToken as e:
+    if ENV == "PROD":
+        raise e
 
 class TelegramReportingService:
     @staticmethod
