@@ -44,7 +44,7 @@ def run_migrations_offline() -> None:
     """
     DB_USER = os.environ.get("DB_USER", "postgres")
     DB_PASSWORD = os.environ.get("DB_PASSWORD")
-    url = "postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@localhost:5432/techhunterdb"
+    url = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@localhost:5432/techhunterdb"
     context.configure(
         url=url,
         target_metadata=target_metadata,
