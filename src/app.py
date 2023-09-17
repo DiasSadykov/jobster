@@ -21,6 +21,10 @@ app.include_router(user.router)
 app.include_router(company.router)
 app.include_router(vacancy.router)
 
+#test handler for sentry
+@app.get("/debug-sentry")
+def trigger_error():
+    division_by_zero = 1 / 0
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True if ENV == "DEV" else False)
