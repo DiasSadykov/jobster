@@ -23,7 +23,9 @@ if config.config_file_name is not None:
 from src.models.sqlmodels import *
 # target_metadata = mymodel.Base.metadata
 target_metadata = SQLModel.metadata
-
+DB_USER = os.environ.get("DB_USER", "postgres")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+config.set_main_option('sqlalchemy.url', f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@localhost:5432/techhunterdb")
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
