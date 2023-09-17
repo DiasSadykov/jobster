@@ -7,7 +7,7 @@ from fastapi.responses import RedirectResponse
 from fastapi_login import LoginManager
 from sqlmodel import Session, select
 from db.utils import engine
-from models.sqlmodels import User
+from models.sqlmodels import User, UserType
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 SECRET = "super-secret-key"
@@ -44,7 +44,7 @@ class LoginService:
         # hash password
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         try:
-            user = User(email=email, password=hashed_password)
+            user = User(email=email, password=hashed_password, user_type=UserType.recruiter)
             session.add(user)
             session.commit()
         except Exception as e:
