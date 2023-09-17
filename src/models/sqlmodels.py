@@ -20,6 +20,7 @@ class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     email: str = Field(sa_column=Column(TEXT, nullable=False, unique=True))
     password: str = Field(sa_column=Column(TEXT, nullable=False))
+    user_type: str = Field(sa_column=Column(TEXT, nullable=False))
     balance: int = Field(sa_column=Column(INTEGER), default=0)
     created_at: datetime = Field(sa_column=Column(TIMESTAMP, nullable=False, server_default=func.now()), default_factory=datetime.utcnow)
 
