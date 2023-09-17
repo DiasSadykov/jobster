@@ -31,6 +31,7 @@ class TelegramReportingService:
         try:
             await bot.send_message(chat_id=PRIVATE_CHANNEL_ID, text=message, parse_mode="HTML", disable_web_page_preview=True)
         except Exception as e:
+            print(e)
             pass
 
     @staticmethod
