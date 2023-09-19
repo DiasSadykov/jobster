@@ -1,32 +1,10 @@
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechHunter</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4EMB7HFP4F"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-4EMB7HFP4F');
-    </script>
-</head>
-
+<html data-theme="light">
+    {% include "static/headers.html" without context %}
 <body>
-    <div class="navbar bg-red-600 color-white">
-        <div class="flex-1">
-            <a href="/" class="btn btn-ghost normal-case text-xl text-white">TechHunter</a>
-        </div>
-
-    </div>
+    {% include "static/navbar.html" %}
     <div class="relative flex flex-col justify-center h-screen overflow-hidden">
-        <div class="w-full p-6 m-auto bg-white rounded-md shadow-md ring-2 ring-gray-800/50 lg:max-w-xl">
-            <h1 class="text-3xl font-semibold text-center text-gray-700">Вход для Рекрутеров</h1>
+        <div class="w-full p-6 m-auto bg-white rounded-xl lg:max-w-xl">
+            <h1 class="text-5xl font-bold text-gray-700 mb-4">Войти</h1>
             <form action="/login" method="post" class="space-y-4">
                 <div>
                     <label class="label">
@@ -48,7 +26,17 @@
                 </div>
                 {% endif %}
                 <div>
-                    <button class="btn btn-block">Войти</button>
+                    <button class="btn btn-neutral btn-block">Войти</button>
+                </div>
+                <br/>
+                <hr/>
+                <div class="">
+                    <span>Еще не зарегистрированы?</span>
+                    <p class="text-xl font-bold text-gray-700 mb-2">Зарегистрируйтесь как </p>
+                    <div class="flex flex-row justify-center">
+                        <a href="signup?user_type=user" class="btn btn-active m-2">Соискатель</a></span>
+                        <a href="signup?user_type=recruiter" class="btn btn-active m-2">Рекрутер</a></span>
+                    </div>
                 </div>
             </form>
         </div>

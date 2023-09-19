@@ -55,9 +55,12 @@
     <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">
        <ul
          class="
+           float-right
            pt-4
            text-base text-gray-700
-           md:flex
+           flex
+           flex-col
+           md:contents
            md:justify-between 
            md:pt-0"
        >
@@ -65,8 +68,17 @@
           <a href="https://t.me/techhunterkz" target="_blank" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Новые вакансии каждый день в Telegram </a>
          </li>
          <li>
+          {% if request.state.user %}
+          <div class="flex flex-row items-center float-right">
+            <p href="/profile" class="px-4 normal-case lg:text-base text-gray-100 font-base">{{request.state.user.email}}</p>
+            <form class="m-0" action="/logout" method="post">
+              <button name="logout" value="upvote" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Выйти</button>
+          </form>
+          </div>
 
-          <a href="/signup" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Подать вакансию</a>
+          {% else %}
+            <a href="/login" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Войти</a>
+          {% endif %}
          </li>
        </ul>
      </div>

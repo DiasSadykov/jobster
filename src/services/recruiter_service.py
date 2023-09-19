@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from sqlmodel import Session
 
-from models.sqlmodels import User, Vacancy
+from models.sqlmodels import User, UserType, Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
 TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
@@ -14,6 +14,8 @@ class RecruiterService:
     def render_dashboard_page(self, request, user: User):
         if not user:
             return templates.TemplateResponse("login/login.html", {"request": request})
+        if user.user_type != UserType.recruiter:
+            return RedirectResponse("/", status_code=303)
         return templates.TemplateResponse("dashboard/dashboard.html", {"request": request, "user": user, "page_title": "TechHunter - Кабинет Рекрутера"})
 
     async def post_vacancy(self, request: Request, user: User, session: Session):

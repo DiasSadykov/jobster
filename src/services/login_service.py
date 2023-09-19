@@ -24,10 +24,13 @@ def query_user(email: str):
         return user
 
 class LoginService:
-    def render_signup_page(self, request, user):
+    def render_signup_page(self, request, user_type: str, user: User):
         if user:
-            return RedirectResponse("/dashboard", status_code=303)
-        return templates.TemplateResponse("signup/signup.html", {"request": request})
+            if user.user_type == UserType.recruiter:
+                return RedirectResponse("/dashboard", status_code=303)
+            else:
+                return RedirectResponse("/", status_code=303)
+        return templates.TemplateResponse("signup/signup.html", {"request": request, "user_type": user_type})
 
     def render_login_page(self, request, user):
         if user:
@@ -39,21 +42,24 @@ class LoginService:
         request_data = await request.form()
         email = request_data.get("email")
         password = request_data.get("password")
+        user_type = request_data.get("user_type")
+        if user_type not in UserType.__members__: 
+            return templates.TemplateResponse("signup/signup.html", {"request": request, "error": "Invalid user type"})
         if not email or not password:
             return templates.TemplateResponse("signup/signup.html", {"request": request, "error": "Email and password are required"})
         # hash password
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         try:
-            user = User(email=email, password=hashed_password, user_type=UserType.recruiter)
+            user = User(email=email, password=hashed_password, user_type=UserType[user_type])
             session.add(user)
             session.commit()
         except Exception as e:
-            return templates.TemplateResponse("signup/signup.html", {"request": request, "error": "Пользователь с таким email уже существует"})
+            return templates.TemplateResponse("signup/signup.html", {"request": request, "error": "Пользователь с таким email уже существует", "user_type": user_type})
         access_token = manager.create_access_token(
             data={'sub': email}
         )
-        await TelegramReportingService.send_message_to_private_channel(f"New user registered: {email}")
-        response = RedirectResponse("/dashboard", status_code=303)
+        await TelegramReportingService.send_message_to_private_channel(f"New {user.user_type} registered: {email}")
+        response = RedirectResponse("/dashboard" if user.user_type == UserType.recruiter else "/", status_code=303)
         response.set_cookie("access_token", access_token)
         return response
 

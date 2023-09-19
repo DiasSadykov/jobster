@@ -15,8 +15,8 @@ async def get_login(request: Request, user=Depends(manager.optional)):
     return login_service.render_login_page(request, user)
 
 @router.get("/signup", response_class=HTMLResponse)
-def get_signup(request: Request, user=Depends(manager.optional)):
-    return login_service.render_signup_page(request, user)
+def get_signup(request: Request, user_type:str, user=Depends(manager.optional)):
+    return login_service.render_signup_page(request, user_type, user)
 
 @router.post("/signup", response_class=HTMLResponse)
 async def post_signup(request: Request, session=Depends(get_session)):
