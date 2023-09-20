@@ -6,8 +6,10 @@ from datetime import datetime, timedelta
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session
 from models.sqlmodels import Vacancy
+from services.reporting.telegram_reporting_service import TelegramReportingService
 from utils.salary import convert_salary_to_int
 from utils.vacancies import calculate_promotion
+from db.utils import engine
 
 TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
 
@@ -82,6 +84,8 @@ class TemplatingService:
         
 
     def render_root_page(self, request, session: Session):
+        connection_pool = engine.pool
+        print(connection_pool.status(), flush=True)
         all_vacancies = self.get_all_vacancies_sorted(session)
         all_vacancies = self.format_vacancies(all_vacancies)
         top_vacancies_by_company = self.get_top_vacancies_by_company(all_vacancies)
