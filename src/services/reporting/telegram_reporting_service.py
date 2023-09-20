@@ -4,7 +4,6 @@ import telegram
 
 from models.sqlmodels import Vacancy
 from utils.salary import convert_salary_to_int
-from utils.vacancies import group_vacancies_by_company
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 ENV = os.environ.get("ENV")
@@ -40,6 +39,31 @@ class TelegramReportingService:
         return f"<a href='{vacancy.url}'>{vacancy.title} {salary}</a>"
 
     @staticmethod
+    def group_vacancies_by_tags(vacancies: list[Vacancy]):
+        tags = [
+            "qa",
+            "ios",
+            "android",
+            "frontend",
+            "backend",
+            "fullstack",
+            "data",
+            "design",
+            "product",
+            "python",
+            "java_",
+            "javascript",
+        ]
+        vacancies_by_tags = {}
+        for tag in tags:
+            vacancies_by_tags[tag] = []
+        for vacancy in vacancies:
+            for tag in tags:
+                if vacancy.tags and tag in vacancy.tags.split(","):
+                    vacancies_by_tags[tag].append(vacancy)
+        return vacancies_by_tags
+
+    @staticmethod
     async def report_added_vacancies_by_company_sorted(session: Session, private=False):
         vacancies = session.query(Vacancy).filter(Vacancy.is_new == True).all()
         if len(vacancies) == 0:
@@ -51,18 +75,17 @@ class TelegramReportingService:
             return
         message = f"<b>Новые вакансии: {len(vacancies)} 🚀</b>\n\n"
         vacancies.sort(key=lambda vacancy: convert_salary_to_int(vacancy.salary), reverse=True)
-        vacancies_by_company = group_vacancies_by_company(vacancies)
-        vacancies_by_company = dict(sorted(vacancies_by_company.items(), key=lambda item: len(item[1]), reverse=True))
-        vacancies_by_company = dict(list(vacancies_by_company.items())[:5])
-        for company, vacancies in vacancies_by_company.items():
-            message += f"<b>{company}</b>\n"
+        vacancies_by_tags: dict[str, list[Vacancy]] = TelegramReportingService.group_vacancies_by_tags(vacancies, )
+        for tag, vacancies in vacancies_by_tags.items():
+            if len(vacancies) == 0:
+                continue
+            message += f"<b>{tag.upper()}</b>: {len(vacancies)}\n"
             for vacancy in vacancies[:3]:
                 message += TelegramReportingService.format_vacancy_with_link(vacancy)
                 message += "\n"
             message += "\n"
-
         message += "\n"
-        message += "Посмотреть остальные вакансии можно на сайте:\n https://techhunter.kz/"
+        message += "Посмотреть остальные новые вакансии можно на сайте:\n https://techhunter.kz/"
 
         if private:
             await TelegramReportingService.send_message_to_private_channel(message)
