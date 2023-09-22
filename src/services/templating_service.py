@@ -1,5 +1,6 @@
 import os
 
+from cachetools import TTLCache
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -9,7 +10,10 @@ from models.sqlmodels import Vacancy
 from services.reporting.telegram_reporting_service import TelegramReportingService
 from utils.salary import convert_salary_to_int
 from utils.vacancies import calculate_promotion
+
 from db.utils import engine
+
+cache = TTLCache(maxsize=100, ttl=600)
 
 TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
 
@@ -59,8 +63,12 @@ city_tag_to_localized_city_title = {
 
 class TemplatingService:
     def get_all_vacancies_sorted(self, session: Session):
+        if cache.get("all_vacancies"):
+            print("Getting all vacancies from cache", flush=True)
+            return cache.get("all_vacancies")
         all_vacancies = session.query(Vacancy).all()
         all_vacancies.sort(key=lambda vacancy: (calculate_promotion(vacancy)+convert_salary_to_int(vacancy.salary)), reverse=True)
+        cache["all_vacancies"] = all_vacancies
         return all_vacancies
 
     def get_top_vacancies_by_company(self, all_vacancies: list[Vacancy]):
