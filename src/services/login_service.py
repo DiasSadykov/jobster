@@ -20,6 +20,10 @@ templates = Jinja2Templates(directory=TEMPLATES_DIR)
 @manager.user_loader()
 def query_user(email: str):
     with Session(engine) as session:
+        connection_pool = engine.pool
+        print(f"Request user by email {email}", flush=True)
+        print("Connection pool status1: " + connection_pool.status(), flush=True)
+
         user = session.query(User).filter(User.email == email).first()
         return user
 
