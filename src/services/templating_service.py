@@ -79,6 +79,9 @@ class TemplatingService:
         return top_vacancies
 
     def format_vacancies(self, vacancies: list[Vacancy]):
+        if cache.get("formatted_vacancies"):
+            print("Getting formateed vacancies from cache", flush=True)
+            return cache.get("formatted_vacancies")
         for vacancy in vacancies:
             if vacancy.source == "techhunter.kz":
                 vacancy.title = "🔥 " + vacancy.title
@@ -88,6 +91,7 @@ class TemplatingService:
                     vacancy.tags += ",new"
                 else:
                     vacancy.tags = "new"
+        cache["formatted_vacancies"] = vacancies
         return vacancies
         
 
