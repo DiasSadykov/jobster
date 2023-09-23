@@ -1,4 +1,4 @@
-# Source code сайта www.techhunter.kz
+# Source code сайта https://techhunter.kz
 
 ## TODO:
  - Написать тесты
