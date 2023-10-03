@@ -1,8 +1,9 @@
 import os
 from fastapi import Request
 from sqlmodel import Session
-from models.sqlmodels import Company
+from models.sqlmodels import Company, CompanyReview, User
 from fastapi.templating import Jinja2Templates
+from services.company_review_service import CompanyReviewService
 
 from services.reporting.telegram_reporting_service import TelegramReportingService
 
@@ -17,9 +18,11 @@ class CompanyService:
     def render_add_new_company_form(self, request: Request):
         return templates.TemplateResponse("companies/add_new_company_form.html", {"request": request, "page_title": "TechHunter - Добавить компанию"})
 
-    def get_company(self, request: Request, id: int, session: Session):
+    def get_company(self, request: Request, id: int, user: User, session: Session):
         company = session.query(Company).where(Company.id == id).first()
-        return templates.TemplateResponse("companies/company.html", {"request": request, "company": company, "page_title": "Профиль IT компании " + company.name})
+        company_review = session.query(CompanyReview).where(CompanyReview.company_id == id).where(CompanyReview.user_id == user.id).first()
+        company_review_questions = CompanyReviewService.get_company_review_questions()
+        return templates.TemplateResponse("companies/company.html", {"request": request, "company": company, "page_title": "Профиль IT компании " + company.name, "company_review_questions": company_review_questions, "company_review": company_review})
 
     async def add_new_company(self, request: Request,
             name: str,

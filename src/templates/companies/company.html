@@ -1,29 +1,74 @@
 <html data-theme="light">
     {% include "static/headers.html" %}
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
 <body>
     {% include "static/navbar.html" %}
-    <div class="mx-5 xl:mx-20 mt-12">
+    <div class="lg:mx-5 xl:mx-20 mt-12">
         <div class="mx-2">
             <a href="/companies" class="btn  normal-case text-xl mb-6 bg-white bg-opacity-100">Назад</a>
         </div>
         <div  class="flex flex-col items-center justify-center shadow-md bg-white bg-opacity-100 pt-12 rounded-xl">
             <img class="h-24 w-24 flex-none rounded-xl bg-gray-50" src="{{company.logo_url}}" alt="">
-        
-            <h1 id="top-vacancies" class="text-4xl font-bold tracking-tight text-slate-900 ">
+            <h1 id="top-vacancies" class="text-4xl font-bold tracking-tight text-slate-900 mb-4">
                 {{company.name}}
             </h1>
-        <div class="w-full px-12">
-            <p class="mt-1 text-xs leading-5 text-gray-500">Тип Компании</time></p>
-            <div class="badge badge-accent badge-outline capitalize :text-sm mt-1 mb-2">{{company.type}}</div>
-            <p class="mt-1 text-xs leading-5 text-gray-500">Индустрия</time></p>
-            <div class="badge badge-accent badge-outline capitalize :text-sm mt-1 mb-2">{{company.industry}}</div>
-            <br/>
-            <p class="mt-1 text-xs leading-5 text-gray-500">Технологический стек</time></p>
-            <div class="badge badge-accent badge-outline capitalize text-sm  mt-1 mb-2">{{company.tech_stack}}</div>
-            <p class="text-base  mt-2 mb-7"><span style="white-space: pre-line">{{company.description}}</span></p>
-        </div>
-        <a href="{{company.website_url}}" class="btn btn-wide m-auto mb-12 btn-outline btn-success">Перейти на сайт компании</a>
+            <button class="btn btn-info m-auto" onclick="my_modal_5.showModal()">Оценить компанию</button>
+            <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+                <div class="modal-box">
+                    {% if request.state.user %}
+                        <form action="/companies/{{company.db_name}}/rate" method="post" class="space-y-4">
+                            <div id="company_review_questions" class="flex flex-col items-center">
+                                {% if company_review %}
+                                    <div class="alert alert-success">
+                                        <span>Вы уже оценивали эту компанию</span>
+                                    </div>
+                                {% endif %}
+                                {% for key, question in company_review_questions.items() %}
+                                    <div class="w-full mb-1">
+                                        <label class="label">
+                                            <span class="text-base label-text font-bold">{{question}}</span>
+                                        </label>
+                                        <input name="{{key}}" type="range" min="0" max="10" value="0" class="range range-xs" step="1" />
+                                        <div class="w-full flex justify-between text-xs px-2">
+                                            <span>0</span>
+                                            <span>1</span>
+                                            <span>2</span>
+                                            <span>3</span>
+                                            <span>4</span>
+                                            <span>5</span>
+                                            <span>6</span>
+                                            <span>7</span>
+                                            <span>8</span>
+                                            <span>9</span>
+                                            <span>10</span>
+                                            </div>
+                                    </div>
 
+                                {% endfor %}
+                                <div>
+                                    <button hx-swap="outerHTML" hx-target="#company_review_questions" hx-post="/company/{{company.id}}/review" class="btn btn-neutral btn-block">Оценить</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        Войдите чтобы оценить компанию
+                    {% endif %}
+                </div>
+                <form method="dialog" class="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
+            <div class="w-full px-8 lg:px-12">
+                <p class="mt-1 text-xs leading-5 text-gray-500">Тип Компании</time></p>
+                <div class="badge badge-accent badge-outline capitalize :text-sm mt-1 mb-2">{{company.type}}</div>
+                <p class="mt-1 text-xs leading-5 text-gray-500">Индустрия</time></p>
+                <div class="badge badge-accent badge-outline capitalize :text-sm mt-1 mb-2">{{company.industry}}</div>
+                <br/>
+                <p class="mt-1 text-xs leading-5 text-gray-500">Технологический стек</time></p>
+                <div class="badge badge-accent badge-outline capitalize text-sm  mt-1 mb-2">{{company.tech_stack}}</div>
+                <p class="text-base  mt-2 mb-7"><span style="white-space: pre-line">{{company.description}}</span></p>
+            </div>
+            <a href="{{company.website_url}}" class="btn btn-wide m-auto mb-12 btn-outline btn-success">Перейти на сайт компании</a>
         </div>
     </div>
     <div class="mx-12 mb-14 flex flex-col">

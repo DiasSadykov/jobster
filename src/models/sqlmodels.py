@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 import enum
-from sqlmodel import INTEGER, TEXT, TIMESTAMP, Column, Enum, Field, SQLModel, func
+from sqlmodel import INTEGER, JSON, TEXT, TIMESTAMP, Column, Enum, Field, ForeignKey, SQLModel, func
 
 class Company(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -14,6 +14,16 @@ class Company(SQLModel, table=True):
     logo_url: Optional[str] = Field(sa_column=Column(TEXT), default=None)
     website_url: Optional[str] = Field(sa_column=Column(TEXT), default=None)
     reviwed_at: Optional[datetime] = Field(sa_column=Column(TIMESTAMP), default=None)
+    created_at: datetime = Field(sa_column=Column(TIMESTAMP, nullable=False, server_default=func.now()), default_factory=datetime.utcnow)
+    updated_at: datetime = Field(sa_column=Column(TIMESTAMP, nullable=False), default_factory=datetime.utcnow)
+
+class CompanyReview(SQLModel, table=True):
+    __tablename__ = "company_review"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    company_id: int = Field(sa_column=Column(INTEGER, ForeignKey("company.id"), nullable=False), foreign_key="company.id")
+    user_id: int = Field(sa_column=Column(INTEGER, ForeignKey("user.id"), nullable=False), foreign_key="user.id")
+    review: dict = Field(sa_column=Column(JSON, nullable=False))
     created_at: datetime = Field(sa_column=Column(TIMESTAMP, nullable=False, server_default=func.now()), default_factory=datetime.utcnow)
     updated_at: datetime = Field(sa_column=Column(TIMESTAMP, nullable=False), default_factory=datetime.utcnow)
 
