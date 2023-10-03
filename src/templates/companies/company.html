@@ -13,7 +13,7 @@
                 {{company.name}}
             </h1>
             <button class="btn btn-info m-auto" onclick="my_modal_5.showModal()">Оценить компанию</button>
-            <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+            <dialog id="my_modal_5" class="modal">
                 <div class="modal-box">
                     {% if request.state.user %}
                         <form action="/companies/{{company.db_name}}/rate" method="post" class="space-y-4">
