@@ -18,10 +18,11 @@ COMPANY_REVIEW_QUESTIONS = {
 class CompanyReviewService:
     async def save_company_review(self, request: Request, company_id: int, user: User, session: Session):
         # delete old review if exists
-        old_review = session.query(CompanyReview).where(CompanyReview.company_id == company_id).where(CompanyReview.user_id == user.id).first()
-        if old_review:
-            session.delete(old_review)
-            session.commit()
+        if user:
+            old_review = session.query(CompanyReview).where(CompanyReview.company_id == company_id).where(CompanyReview.user_id == user.id).first()
+            if old_review:
+                session.delete(old_review)
+                session.commit()
 
         review = {}
         form = await request.form()
