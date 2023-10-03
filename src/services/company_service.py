@@ -20,7 +20,7 @@ class CompanyService:
 
     def get_company(self, request: Request, id: int, user: User, session: Session):
         company = session.query(Company).where(Company.id == id).first()
-        company_review = session.query(CompanyReview).where(CompanyReview.company_id == id).where(CompanyReview.user_id == user.id).first()
+        company_review = session.query(CompanyReview).where(CompanyReview.company_id == id).where(CompanyReview.user_id == user.id).first() if user else None
         company_review_questions = CompanyReviewService.get_company_review_questions()
         return templates.TemplateResponse("companies/company.html", {"request": request, "company": company, "page_title": "Профиль IT компании " + company.name, "company_review_questions": company_review_questions, "company_review": company_review})
 
