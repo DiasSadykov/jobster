@@ -12,7 +12,7 @@
             <h1 id="top-vacancies" class="text-4xl font-bold tracking-tight text-slate-900 mb-4">
                 {{company.name}}
             </h1>
-            <button class="btn btn-info m-auto" onclick="my_modal_5.showModal()">Оценить компанию</button>
+            <button class="btn btn-success m-auto" onclick="my_modal_5.showModal()">Оценить компанию</button>
             <dialog id="my_modal_5" class="modal">
                 <div class="modal-box">
                     {% if request.state.user %}
@@ -59,6 +59,18 @@
                 </form>
             </dialog>
             <div class="w-full px-8 lg:px-12">
+                <div сlass="ml-2">
+                    {% if company_review_summary %}
+                    <p class="mt-1 text-xs leading-5 text-gray-500 mb-2 mt-4">Рейтинг компании на основе <b>{{ len_reviews }} {{ 'отзыва' if len_reviews == 1 else 'отзывов' }}
+                    </b> </time></p>
+                        {% for key, review in company_review_summary.items() %}
+                            <div class="w-full mb-2">
+                                <p class="text-sm font-bold">{{company_review_questions[key]}}</p>
+                                <progress class="progress progress-success w-56" value="{{review}}" max="10"></progress> <span class="text-xs">{{review}}/10</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
                 <p class="mt-1 text-xs leading-5 text-gray-500">Тип Компании</time></p>
                 <div class="badge badge-accent badge-outline capitalize :text-sm mt-1 mb-2">{{company.type}}</div>
                 <p class="mt-1 text-xs leading-5 text-gray-500">Индустрия</time></p>

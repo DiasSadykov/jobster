@@ -46,5 +46,20 @@ class CompanyReviewService:
             status_code=200
         )
 
+    @staticmethod
+    def get_and_calculate_company_review(company_id: int, session: Session):
+        reviews = session.query(CompanyReview).where(CompanyReview.company_id == company_id).all()
+        if len(reviews) == 0:
+            return None
+        review = {}
+        for key in COMPANY_REVIEW_QUESTIONS.keys():
+            review[key] = 0
+        for r in reviews:
+            for key in COMPANY_REVIEW_QUESTIONS.keys():
+                review[key] += r.review[key]
+        for key in COMPANY_REVIEW_QUESTIONS.keys():
+            review[key] = round(review[key] / len(reviews), 1)
+        return len(reviews), review
+
     def get_company_review_questions():
         return COMPANY_REVIEW_QUESTIONS

@@ -20,9 +20,10 @@ class CompanyService:
 
     def get_company(self, request: Request, id: int, user: User, session: Session):
         company = session.query(Company).where(Company.id == id).first()
-        company_review = session.query(CompanyReview).where(CompanyReview.company_id == id).where(CompanyReview.user_id == user.id).first() if user else None
+        own_company_review = session.query(CompanyReview).where(CompanyReview.company_id == id).where(CompanyReview.user_id == user.id).first() if user else None
         company_review_questions = CompanyReviewService.get_company_review_questions()
-        return templates.TemplateResponse("companies/company.html", {"request": request, "company": company, "page_title": "Профиль IT компании " + company.name, "company_review_questions": company_review_questions, "company_review": company_review})
+        len_reviews, company_review_summary = CompanyReviewService.get_and_calculate_company_review(id, session)
+        return templates.TemplateResponse("companies/company.html", {"request": request, "company": company, "page_title": "Профиль IT компании " + company.name, "company_review_questions": company_review_questions, "own_company_review": own_company_review, "len_reviews": len_reviews, "company_review_summary": company_review_summary})
 
     async def add_new_company(self, request: Request,
             name: str,
