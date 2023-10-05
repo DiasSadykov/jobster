@@ -50,7 +50,7 @@ class CompanyReviewService:
     def get_and_calculate_company_review(company_id: int, session: Session):
         reviews = session.query(CompanyReview).where(CompanyReview.company_id == company_id).all()
         if len(reviews) == 0:
-            return None
+            return 0, None
         review = {}
         for key in COMPANY_REVIEW_QUESTIONS.keys():
             review[key] = 0
