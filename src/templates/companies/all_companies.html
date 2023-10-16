@@ -26,7 +26,7 @@
                             <div class="flex flex-col w-42 justify-end">
                                 <div class="self-end"><span class="font-bold text-3xl text-green-600">{{company_reviews_averaged[company.id][1]}}</span> <b>/10</b></div>
                                 <div class="text-slate-500">
-                                    на основе <b>{{company_reviews_averaged[company.id][0]}}</b> отзывов
+                                    на основе <b>{{company_reviews_averaged[company.id][0]}}</b> {{ 'отзыва' if company_reviews_averaged[company.id][0] == 1 else 'отзывов' }}
                                 </div>
 
                             </div>
