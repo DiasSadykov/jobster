@@ -10,17 +10,32 @@
             <p class="text-xl font-light mt-2 mb-12 px-12 text-center">
                 Мы собираем информацию о всех IT компаниях в Казахстане, для того чтобы вы могли сравнить их и выбрать лучшую для себя
             </p>
+            <input id="company_search" type="text" placeholder="🔎 Поиск" class="input input-bordered w-full max-w-xs mb-12" />
         </div>
     </div>
     <div class="mx-4 lg:mx-12 mb-96 flex flex-col  ">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-12 max-w-screen-xl mx-auto">
             {% for company in companies %}
-                <a href="/company/{{company.id}}" class="rounded-3xl bg-white-true p-6 lg:p-12 flex flex-col justify-between bg-white bg-opacity-100">
+                <a href="/company/{{company.id}}" id="company" class="rounded-3xl bg-white-true p-6 lg:p-12 flex flex-col justify-between bg-white bg-opacity-100">
                         <div class="flex items-center space-x-4">
                             <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="{{company.logo_url}}" alt="">
                             <div class="min-w-0 flex-auto">
                                 <p class="font-bold text-20 ">{{company.name}}</p>
                             </div>
+                            {% if company_reviews_averaged[company.id] %}
+                            <div class="flex flex-col w-42 justify-end">
+                                <div class="self-end"><span class="font-bold text-3xl text-green-600">{{company_reviews_averaged[company.id][1]}}</span> <b>/10</b></div>
+                                <div class="text-slate-500">
+                                    на основе <b>{{company_reviews_averaged[company.id][0]}}</b> отзывов
+                                </div>
+
+                            </div>
+
+                            {% else %}
+
+                                <p class="font-bold text-md text-grey-300">Нет оценок</p>
+                            {% endif %}
+
                         </div>
                         <div class="h-6"></div>
                         <div class="text-black-6 h-32"><p class="line-clamp-5">{{company.description}}</p></div>
@@ -49,5 +64,21 @@
         </div>
     {% include "static/footer.html" %}
     {% include "static/cookie.html" without context %}
+    <script>
+        const searchInput = document.getElementById("company_search");
+        const items = document.querySelectorAll("#company");
+        searchInput.addEventListener("input", function () {
+        const searchTerm = searchInput.value.toLowerCase();
+        items.forEach((item) => {
+            const text = item.textContent.toLowerCase();
+
+            if (text.includes(searchTerm)) {
+            item.style.display = "block";
+            } else {
+            item.style.display = "none";
+            }
+        });
+        });
+    </script>
 </body>
 </html>

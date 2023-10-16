@@ -12,8 +12,10 @@ templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 class CompanyService:
     def return_all_companies(self, request: Request, session: Session):
-        companies = session.query(Company).where(Company.reviwed_at != None).all()
-        return templates.TemplateResponse("companies/all_companies.html", {"request": request, "companies": companies, "page_title": "Все IT компании Казахстана"})
+        companies: list[Company] = session.query(Company).where(Company.reviwed_at != None).all()
+        company_reviews_averaged = CompanyReviewService.get_and_calculate_all_companies_reviews_by_company(session)
+        companies_sorted_by_number_of_reviews = sorted(companies, key=lambda x: company_reviews_averaged.get(x.id, (0,0))[1], reverse=True)
+        return templates.TemplateResponse("companies/all_companies.html", {"request": request, "companies": companies_sorted_by_number_of_reviews, "page_title": "Все IT компании Казахстана", "company_reviews_averaged": company_reviews_averaged})
 
     def render_add_new_company_form(self, request: Request):
         return templates.TemplateResponse("companies/add_new_company_form.html", {"request": request, "page_title": "TechHunter - Добавить компанию"})

@@ -1,3 +1,4 @@
+from collections import defaultdict
 from fastapi import Request
 from fastapi.responses import HTMLResponse
 from sqlmodel import Session
@@ -47,10 +48,7 @@ class CompanyReviewService:
         )
 
     @staticmethod
-    def get_and_calculate_company_review(company_id: int, session: Session):
-        reviews = session.query(CompanyReview).where(CompanyReview.company_id == company_id).all()
-        if len(reviews) == 0:
-            return 0, None
+    def calculate_company_review(reviews: list[CompanyReview]):
         review = {}
         for key in COMPANY_REVIEW_QUESTIONS.keys():
             review[key] = 0
@@ -60,6 +58,38 @@ class CompanyReviewService:
         for key in COMPANY_REVIEW_QUESTIONS.keys():
             review[key] = round(review[key] / len(reviews), 1)
         return len(reviews), review
+
+    @staticmethod
+    def calculate_company_review_averaged(reviews: list[CompanyReview]):
+        review = {}
+        for key in COMPANY_REVIEW_QUESTIONS.keys():
+            review[key] = 0
+        for r in reviews:
+            for key in COMPANY_REVIEW_QUESTIONS.keys():
+                review[key] += r.review[key]
+        for key in COMPANY_REVIEW_QUESTIONS.keys():
+            review[key] = round(review[key] / len(reviews), 1)
+
+        return len(reviews), round(sum(review.values()) / len(COMPANY_REVIEW_QUESTIONS.keys()), 1)
+
+    @staticmethod
+    def get_and_calculate_company_review(company_id: int, session: Session):
+        reviews = session.query(CompanyReview).where(CompanyReview.company_id == company_id).all()
+        if len(reviews) == 0:
+            return 0, None
+        return CompanyReviewService.calculate_company_review(reviews)
+
+    @staticmethod
+    def get_and_calculate_all_companies_reviews_by_company(session: Session):
+        company_reviews = session.query(CompanyReview).all()
+        company_reviews_by_company = defaultdict(list)
+        for company_review in company_reviews:
+            company_reviews_by_company[company_review.company_id].append(company_review)
+
+        company_reviews_aggregated = {}
+        for company_id, company_reviews in company_reviews_by_company.items():
+            company_reviews_aggregated[company_id] = CompanyReviewService.calculate_company_review_averaged(company_reviews) 
+        return company_reviews_aggregated
 
     def get_company_review_questions():
         return COMPANY_REVIEW_QUESTIONS
