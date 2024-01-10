@@ -40,8 +40,9 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
             raise Exception(f"[{self.log_tag}] did not find vacancies on page {response.url}")
         vacancies = []
         for vacancy_raw in vacancies_raw:
-            title_and_url = vacancy_raw.find("a", {"class": "serp-item__title"})
-            title = title_and_url.text
+            title_and_url = vacancy_raw.find("h3", {"data-qa": "bloko-header-3"})
+            title_and_url = title_and_url.find("a")
+            title = title_and_url.find("span", {"class": "serp-item__title"}).text.strip()
             url = title_and_url.get("href")
             url = urljoin(url, urlparse(url).path)
             city = vacancy_raw.find("div", {"data-qa": "vacancy-serp__vacancy-address"})
