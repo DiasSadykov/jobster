@@ -1,5 +1,6 @@
 <html data-theme="light">
-    {% include "static/headers.html" without context %}
+{% include "static/headers.html" without context %}
+
 <body>
     <div class="rounded-b-xl">
         {% include "static/navbar.html" %}
@@ -8,18 +9,19 @@
         </div>
     </div>
     <div class="xl:mx-20">
-        {% include "top_vacancies.html" %}
         {% include "all_vacancies.html" %}
+        {% include "top_vacancies.html" %}
     </div>
     {% include "static/footer.html" %}
     {% include "static/cookie.html" without context %}
     <script>
-    var typed = new Typed('#element', {
-        strings: ['следующую работу', 'первую работу', 'работу в IT'],
-        typeSpeed: 100,
-        backSpeed: 50,
-        loop: true
-    });
+        var typed = new Typed('#element', {
+            strings: ['следующую работу', 'первую работу', 'работу в IT'],
+            typeSpeed: 100,
+            backSpeed: 50,
+            loop: true
+        });
     </script>
 </body>
+
 </html>
