@@ -1,4 +1,4 @@
-<div  class="flex flex-col items-center justify-center mx-4">
+<div class="mt-36 flex flex-col items-center justify-center mx-4">
     <h1 id="top-vacancies" class="text-4xl font-bold tracking-tight text-slate-900 text-center">
         Популярные компании 🔥
     </h1>
@@ -8,42 +8,45 @@
 </div>
 <div class="grid md:grid-cols-2 lg:grid-cols-3 mx-4">
     {% for employer in top_employers %}
-            <div class="grid-item">
-                <div class="card bg-transparent bg-white bg-opacity-100 md:mx-6 lg:mx-8 my-6 shadow">
-                <div class="card-body items-center text-center">
-                    <div class="avatar">
-                        <div class="mask mask-squircle w-24 h-24">
-                            <img src="{{employer.logo}}" alt="Avatar Tailwind CSS Component" />
-                        </div>
-                    </div>
-                    <div>
-                        <div class="h text-2xl font-bold min-w-full">{{employer.shown_name}}</div>
-                    </div>
-                    <div class="">
-                        <ul role="list" class="mx-auto max-w-md p-2 h-[500px] [&::-webkit-scrollbar]:hidden overflow-scroll">
-                            {% for vacancy in top_vacancies_by_company[employer.db_name] %}
-                                <a href="{{vacancy.url}}" target="_blank">
-                                    <li class="hover:scale-110 transition border-b relative flex justify-between p-4 hover:bg-slate-100">
-                                        <div>
-                                            <div class="text-xl text-left font-bold">{{vacancy.title}}</div>
-                                            <div class="text-sm text-left opacity-50">{{vacancy.salary if vacancy.salary is not none else 'Зарплата не указана'}}</div>
-                                        </div class="flex">
-                                        <div>
-                                            {% if vacancy.city %}
-                                                <span class="m-auto badge badge-ghost badge-xl">{{vacancy.city}}</span>
-                                            {% endif %}
-                                        </div>
-                                        <!-- <a class="group/edit invisible absolute inset-0 flex items-center py-1 pl-4 pr-3 text-sm text-slate-500 hover:backdrop-blur-sm group-hover/item:visible" href="{{vacancy.url}}"> -->
-                                        <!-- <span class="font-bold animate-bounce  text-3xl group-hover/edit:text-black mx-auto">👆</span> -->
-                                    </li>
-                                </a>
-                            {% endfor %}
-                        </ul>
-                        <!-- foot -->
+    <div class="grid-item">
+        <div class="card bg-transparent bg-white bg-opacity-100 md:mx-6 lg:mx-8 my-6 shadow">
+            <div class="card-body items-center text-center">
+                <div class="avatar">
+                    <div class="mask mask-squircle w-24 h-24">
+                        <img src="{{employer.logo}}" alt="Avatar Tailwind CSS Component" />
                     </div>
                 </div>
+                <div>
+                    <div class="h text-2xl font-bold min-w-full">{{employer.shown_name}}</div>
+                </div>
+                <div class="">
+                    <ul role="list"
+                        class="mx-auto max-w-md p-2 h-[500px] [&::-webkit-scrollbar]:hidden overflow-scroll">
+                        {% for vacancy in top_vacancies_by_company[employer.db_name] %}
+                        <a href="{{vacancy.url}}" target="_blank">
+                            <li
+                                class="hover:scale-110 transition border-b relative flex justify-between p-4 hover:bg-slate-100">
+                                <div>
+                                    <div class="text-xl text-left font-bold">{{vacancy.title}}</div>
+                                    <div class="text-sm text-left opacity-50">{{vacancy.salary if vacancy.salary is not
+                                        none else 'Зарплата не указана'}}</div>
+                                </div class="flex">
+                                <div>
+                                    {% if vacancy.city %}
+                                    <span class="m-auto badge badge-ghost badge-xl">{{vacancy.city}}</span>
+                                    {% endif %}
+                                </div>
+                                <!-- <a class="group/edit invisible absolute inset-0 flex items-center py-1 pl-4 pr-3 text-sm text-slate-500 hover:backdrop-blur-sm group-hover/item:visible" href="{{vacancy.url}}"> -->
+                                <!-- <span class="font-bold animate-bounce  text-3xl group-hover/edit:text-black mx-auto">👆</span> -->
+                            </li>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                    <!-- foot -->
                 </div>
             </div>
+        </div>
+    </div>
     {% endfor %}
 
 </div>
