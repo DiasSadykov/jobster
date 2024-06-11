@@ -1,4 +1,5 @@
 import asyncio
+import re
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 
@@ -34,18 +35,22 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
 
     async def findData(self, response):
         soup = BeautifulSoup(response.text, 'html.parser')
-        vacancies_raw = soup.find_all("div", {"class": "vacancy-serp-item__layout"})
+        # Changed the class selector to match the new layout
+        vacancies_raw = soup.find_all("div", {"data-qa": re.compile("vacancy-serp__vacancy")})
+        
         if not vacancies_raw:
             await TelegramReportingService.send_message_to_private_channel(f"[{self.log_tag}] did not find vacancies on page {response.url}")
             raise Exception(f"[{self.log_tag}] did not find vacancies on page {response.url}")
+        
         vacancies = []
         for vacancy_raw in vacancies_raw:
-            title_and_url = vacancy_raw.find("h3", {"data-qa": "bloko-header-3"})
+            title_and_url = vacancy_raw.find("h2", {"data-qa": "bloko-header-2"})
             title_and_url = title_and_url.find("a")
-            title = title_and_url.find("span", {"class": "serp-item__title"}).text.strip()
+            title = title_and_url.find("span", {"data-qa": "serp-item__title"}).text.strip()
             url = title_and_url.get("href")
             url = urljoin(url, urlparse(url).path)
-            city = vacancy_raw.find("div", {"data-qa": "vacancy-serp__vacancy-address"})
+
+            city = vacancy_raw.find("span", {"data-qa": "vacancy-serp__vacancy-address_narrow"})
             if city:
                 city = city.text.strip()
             else:
@@ -55,15 +60,16 @@ class HHKZVacancyScrapper(VacancyScrapperBase):
                 company = company.text.strip()
             else:
                 company = None
-            salary = vacancy_raw.find("span", {"data-qa": "vacancy-serp__vacancy-compensation"})
+            salary = vacancy_raw.find("span", {"class": re.compile("compensation-text")})
             if salary:
                 salary = salary.text.strip()
             else:
                 salary = None
-            remote = vacancy_raw.find("div", {"data-qa": "vacancy-label-remote-work-schedule"})
+            remote = vacancy_raw.find("span", {"data-qa": "vacancy-label-remote-work-schedule"})
             tags = None
             if remote:
                 tags = "remote"
 
+            print(f"{title} - {url} - {salary} - {city} - {company} - {tags}")
             vacancies.append(Vacancy(title=title, url=url, salary=salary, company=company, city=city, tags=tags, source=self.source, is_new=True))
         return vacancies

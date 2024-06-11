@@ -28,7 +28,10 @@ class TelegramReportingService:
     @staticmethod
     async def send_message_to_private_channel(message):
         try:
-            await bot.send_message(chat_id=PRIVATE_CHANNEL_ID, text=message, parse_mode="HTML", disable_web_page_preview=True)
+            if ENV == "PROD":
+                await bot.send_message(chat_id=PRIVATE_CHANNEL_ID, text=message, parse_mode="HTML", disable_web_page_preview=True)
+            else:
+                print(message)
         except Exception as e:
             print(e)
             pass
