@@ -8,13 +8,13 @@ services:
     restart: always
     container_name: python_web_service
     ports:
-      - "8000:8000"  # Replace the second port with the one your Python web service listens on
+      - "8000:8000" # Replace the second port with the one your Python web service listens on
     volumes:
-      - ./:/app  # Mount your Python web service code to the container
-      - ~/data:/data  # Mount a volume to store the database
+      - ./:/app # Mount your Python web service code to the container
+      - ~/data:/data # Mount a volume to store the database
     env_file:
       - .env
-    command: ["python", "src/app.py"]  # Replace with the correct path to your web service script
+    command: [ "python", "src/app.py" ] # Replace with the correct path to your web service script
     network_mode: "host"
 
   scraper:
@@ -24,11 +24,11 @@ services:
     restart: always
     container_name: scraper_job
     volumes:
-      - ./:/app  # Mount your scraper code to the container
-      - ~/data:/data  # Mount a volume to store the database
+      - ./:/app # Mount your scraper code to the container
+      - ~/data:/data # Mount a volume to store the database
     env_file:
       - .env
-    command: ["python", "-u", "src/scraper.py"]  # Replace with the correct path to your scrap.py script
+    command: [ "python", "-u", "src/scraper.py" ] # Replace with the correct path to your scrap.py script
     network_mode: "host"
 
   reporter:
@@ -38,9 +38,24 @@ services:
     restart: always
     container_name: reporter_job
     volumes:
-      - ./:/app  # Mount your scraper code to the container
-      - ~/data:/data  # Mount a volume to store the database
+      - ./:/app # Mount your scraper code to the container
+      - ~/data:/data # Mount a volume to store the database
     env_file:
       - .env
-    command: ["python", "-u", "src/reporter.py"]  # Replace with the correct path to your scrap.py script
+    command: [ "python", "-u", "src/reporter.py" ] # Replace with the correct path to your scrap.py script
+    network_mode: "host"
+
+  resume_reviewer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    container_name: resume_reviewer_job
+    volumes:
+      - ./:/app # Mount your scraper code to the container
+      - ~/data:/data # Mount a volume to store the database
+      - ~/resumes:/resumes # Mount a volume to store the database
+    env_file:
+      - .env
+    command: [ "python", "-u", "src/resume_reviewer.py" ] # Replace with the correct path to your scrap.py script
     network_mode: "host"
