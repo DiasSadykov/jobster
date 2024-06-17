@@ -1,6 +1,5 @@
 <header>
-  <nav
-     class="
+  <nav class="
        flex flex-wrap
        items-center
        justify-between
@@ -11,50 +10,38 @@
        md:px-4
        text-lg text-gray-700
        bg-red-600
-     "
-   >
+     ">
     <div class="flex flex-col md:flex-row items-start md:items-center">
       <a href="/" class="btn btn-ghost normal-case text-lg text-white md:my-2">
         <div class="w-10 rounded-full">
-            <img src="https://i.postimg.cc/vZDH6jyp/Untitled-11.png">
+          <img src="https://i.postimg.cc/vZDH6jyp/Untitled-11.png">
         </div>
         TechHunter
       </a>
       <ul class="menu !py-0 menu-horizontal text-white hover:text-white !font-semibold">
         <li>
           <details>
-              <summary>
+            <summary>
               Вакансии 👩‍💻
-              </summary>
-              <ul class="text-black ">
+            </summary>
+            <ul class="text-black ">
               <li><a href="/#top-vacancies">Популярные компании 🔥</a></li>
               <li><a href="/#all-vacancies">Все вакансии 👩‍💻</a></li>
-              </ul>
+            </ul>
           </details>
         </li>
         <li><a href="/companies" class="">Компании 💼</a></li>
+        <li><a href="/cv-review" class="">Ревью Резюме 📄</a></li>
       </ul>
-     </div>
-    
-      <svg
-         xmlns="http://www.w3.org/2000/svg"
-         id="menu-button"
-         class="h-6 w-6 cursor-pointer md:hidden block"
-         fill="none"
-         viewBox="0 0 24 24"
-         stroke="white"
-       >
-         <path
-           stroke-linecap="round"
-           stroke-linejoin="round"
-           stroke-width="2"
-           d="M4 6h16M4 12h16M4 18h16"
-         />
-       </svg>
-    
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" id="menu-button" class="h-6 w-6 cursor-pointer md:hidden block" fill="none"
+      viewBox="0 0 24 24" stroke="white">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+
     <div class="hidden w-full md:flex md:items-center md:w-auto" id="menu">
-       <ul
-         class="
+      <ul class="
            float-right
            pt-4
            text-base text-gray-700
@@ -62,39 +49,43 @@
            flex-col
            md:contents
            md:justify-between 
-           md:pt-0"
-       >
-         <li>
-          <a href="https://t.me/techhunterkz" target="_blank" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Новые вакансии каждый день в Telegram </a>
-         </li>
-         <li>
+           md:pt-0">
+        <li>
+          <a href="https://t.me/techhunterkz" target="_blank"
+            class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Новые вакансии каждый день в Telegram
+          </a>
+        </li>
+        <li>
 
           {% if request.state.user %}
-            {% if request.state.user.user_type == "recruiter" %}
-              <a href="/dashboard" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Подать вакансию</a>
-            {% endif %}
+          {% if request.state.user.user_type == "recruiter" %}
+          <a href="/dashboard" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Подать
+            вакансию</a>
+          {% endif %}
           <div class="flex flex-row items-center float-right">
-            <p href="/profile" class="px-4 normal-case lg:text-base text-gray-100 font-base">{{request.state.user.email}}</p>
+            <p href="/profile" class="px-4 normal-case lg:text-base text-gray-100 font-base">
+              {{request.state.user.email}}</p>
             <form class="m-0" action="/logout" method="post">
-              <button name="logout" value="upvote" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Выйти</button>
-          </form>
+              <button name="logout" value="upvote"
+                class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Выйти</button>
+            </form>
           </div>
 
           {% else %}
-            <a href="/login" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Войти</a>
+          <a href="/login" class="btn btn-ghost normal-case lg:text-base text-gray-100 font-base">Войти</a>
           {% endif %}
-          </li>
-       </ul>
-     </div>
- </nav>
+        </li>
+      </ul>
+    </div>
+  </nav>
 </header>
 <script>
   const button = document.querySelector('#menu-button');
-const menu = document.querySelector('#menu');
+  const menu = document.querySelector('#menu');
 
 
-button.addEventListener('click', () => {
-  menu.classList.toggle('hidden');
-});
+  button.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+  });
 
-  </script>
+</script>

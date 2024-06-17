@@ -1,13 +1,16 @@
 import os
+from fastapi.templating import Jinja2Templates
 import sentry_sdk
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from routers import user, company, vacancy
 from fastapi.middleware.gzip import GZipMiddleware
 
 from services.login_service import manager
 
 ENV = os.environ.get("ENV") or "DEV"
+TEMPLATES_DIR = os.environ.get("TEMPLATES_DIR", "src/templates")
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 if ENV == "PROD":
     sentry_sdk.init(
@@ -24,9 +27,9 @@ app.include_router(user.router)
 app.include_router(company.router)
 app.include_router(vacancy.router)
 
-@app.get("/debug-sentry")
-def trigger_error():
-    1 / 0
+@app.get("/cv-review")
+def cv_review(request: Request):
+    return templates.TemplateResponse("cv_review.html", {"request": request, "page_title": "Techhunter - CV Review"})
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True if ENV == "DEV" else False)

@@ -1,0 +1,15 @@
+<html data-theme="light">
+{% include "static/headers.html" %}
+
+<body>
+    <div class="rounded-b-xl">
+        {% include "static/navbar.html" %}
+        <div class="xl:mx-20 mt-20 lg:mt-32">
+            {% include "static/cv_review.html" without context %}
+        </div>
+    </div>
+    {% include "static/footer.html" %}
+    {% include "static/cookie.html" without context %}
+</body>
+
+</html>
